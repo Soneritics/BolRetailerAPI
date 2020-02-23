@@ -10,6 +10,9 @@ using BolRetailerAPI.Models;
 
 namespace BolRetailerAPI.Client
 {
+    /// <summary>
+    /// Base client. Uses no authentication, only calls Http endpoints and processes the results.
+    /// </summary>
     public class ClientBase
     {
         public Error LastError { get; protected set; }
@@ -17,6 +20,11 @@ namespace BolRetailerAPI.Client
         protected readonly HttpClient HttpClient;
         protected readonly IEndPoints EndPoints;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClientBase"/> class.
+        /// </summary>
+        /// <param name="httpClient">The HTTP client.</param>
+        /// <param name="endPoints">The end points.</param>
         public ClientBase(HttpClient httpClient, IEndPoints endPoints)
         {
             HttpClient = httpClient;
@@ -25,12 +33,25 @@ namespace BolRetailerAPI.Client
             HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+        /// <summary>
+        /// Gets the API result via GET.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="endPoint">The end point.</param>
+        /// <returns></returns>
         public virtual async Task<TResult> GetApiResultViaGet<TResult>(string endPoint)
         {
             var apiResult = await HttpClient.GetAsync(endPoint);
             return await GetProcessedResult<TResult>(apiResult);
         }
 
+        /// <summary>
+        /// Gets the API result via POST.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="endPoint">The end point.</param>
+        /// <param name="post">The post.</param>
+        /// <returns></returns>
         public virtual async Task<TResult> GetApiResultViaPost<TResult>(string endPoint, object post)
         {
             var content = JsonConvert.SerializeObject(post);
@@ -38,6 +59,12 @@ namespace BolRetailerAPI.Client
             return await GetProcessedResult<TResult>(apiResult);
         }
 
+        /// <summary>
+        /// Gets the processed (deserialized) result.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="httpResponseMessage">The HTTP response message.</param>
+        /// <returns></returns>
         protected async Task<TResult> GetProcessedResult<TResult>(HttpResponseMessage httpResponseMessage)
         {
             LastRequestStatus = httpResponseMessage.StatusCode;
@@ -48,6 +75,13 @@ namespace BolRetailerAPI.Client
             return await GetDeserializedResponse<TResult>(httpResponseMessage);
         }
 
+        /// <summary>
+        /// Throws the HTTP exception, based on the Http header the API sent.
+        /// </summary>
+        /// <param name="httpResponseMessage">The HTTP response message.</param>
+        /// <exception cref="BolRetailerAPI.Exceptions.UnauthorizedException"></exception>
+        /// <exception cref="BolRetailerAPI.Exceptions.TooManyRequestsException"></exception>
+        /// <exception cref="System.Exception">HttpRequestException occured with message '{LastError.error_description}'</exception>
         protected async void ThrowHttpException(HttpResponseMessage httpResponseMessage)
         {
             // First set the error message so it can be retrieved
@@ -73,6 +107,12 @@ namespace BolRetailerAPI.Client
             throw new Exception($"HttpRequestException occured with message '{LastError.error_description}'");
         }
 
+        /// <summary>
+        /// Gets the deserialized response from the API.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="httpResponseMessage">The HTTP response message.</param>
+        /// <returns></returns>
         protected async Task<TResult> GetDeserializedResponse<TResult>(HttpResponseMessage httpResponseMessage)
         {
             var msgString = await httpResponseMessage.Content.ReadAsStringAsync();
