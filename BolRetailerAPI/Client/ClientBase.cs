@@ -57,12 +57,15 @@ namespace BolRetailerAPI.Client
         /// <returns></returns>
         protected virtual async Task<HttpRequestMessage> GetHttpRequestMessage(HttpMethod httpMethod, string endPoint, object post = null)
         {
-            var result = new HttpRequestMessage(httpMethod, endPoint);
+            return await Task.Run(() =>
+            {
+                var result = new HttpRequestMessage(httpMethod, endPoint);
 
-            if (post != null)
-                result.Content = new StringContent(JsonConvert.SerializeObject(post));
+                if (post != null)
+                    result.Content = new StringContent(JsonConvert.SerializeObject(post));
 
-            return result;
+                return result;
+            });
         }
 
         /// <summary>
