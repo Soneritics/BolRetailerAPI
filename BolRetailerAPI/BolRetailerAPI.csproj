@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>BolRetailerAPI</PackageId>
-    <Version>1.0.0</Version>
+    <Version>Alpha-0.0.1</Version>
     <Authors>Soneritics</Authors>
     <Description>Retailer API for Bol.com</Description>
     <IsPackable>true</IsPackable>
