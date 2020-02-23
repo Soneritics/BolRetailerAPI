@@ -13,7 +13,7 @@ namespace BolRetailerAPI.Client
     /// <summary>
     /// Base client. Uses no authentication, only calls Http endpoints and processes the results.
     /// </summary>
-    public class ClientBase
+    public abstract class ClientBase
     {
         public Error LastError { get; protected set; }
         public HttpStatusCode LastRequestStatus { get; protected set; }
@@ -34,29 +34,35 @@ namespace BolRetailerAPI.Client
         }
 
         /// <summary>
-        /// Gets the API result via GET.
+        /// Gets the API result.
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="httpMethod">The HTTP method.</param>
         /// <param name="endPoint">The end point.</param>
+        /// <param name="post">The post.</param>
         /// <returns></returns>
-        public virtual async Task<TResult> GetApiResultViaGet<TResult>(string endPoint)
+        public async Task<TResult> GetApiResult<TResult>(HttpMethod httpMethod, string endPoint, object post = null)
         {
-            var apiResult = await HttpClient.GetAsync(endPoint);
+            var request = await GetHttpRequestMessage(httpMethod, endPoint, post);
+            var apiResult = await HttpClient.SendAsync(request);
             return await GetProcessedResult<TResult>(apiResult);
         }
 
         /// <summary>
-        /// Gets the API result via POST.
+        /// Gets the HTTP request message.
         /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="httpMethod">The HTTP method.</param>
         /// <param name="endPoint">The end point.</param>
         /// <param name="post">The post.</param>
         /// <returns></returns>
-        public virtual async Task<TResult> GetApiResultViaPost<TResult>(string endPoint, object post)
+        protected virtual async Task<HttpRequestMessage> GetHttpRequestMessage(HttpMethod httpMethod, string endPoint, object post = null)
         {
-            var content = JsonConvert.SerializeObject(post);
-            var apiResult = await HttpClient.PostAsync(endPoint, new StringContent(content));
-            return await GetProcessedResult<TResult>(apiResult);
+            var result = new HttpRequestMessage(httpMethod, endPoint);
+
+            if (post != null)
+                result.Content = new StringContent(JsonConvert.SerializeObject(post));
+
+            return result;
         }
 
         /// <summary>
