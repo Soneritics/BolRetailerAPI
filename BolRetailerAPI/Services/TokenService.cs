@@ -36,7 +36,8 @@ namespace BolRetailerAPI.Services
                 client_secret = clientSecret
             };
 
-            return await GetApiResultViaPost<Token>(
+            return await GetApiResult<Token>(
+                HttpMethod.Post,
                 $"{EndPoints.BaseUriLogin}{EndPoints.Token}",
                 postObject
             );
