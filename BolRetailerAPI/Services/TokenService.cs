@@ -1,4 +1,7 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using BolRetailerAPI.Client;
 using BolRetailerAPI.Endpoints;
@@ -13,6 +16,15 @@ namespace BolRetailerAPI.Services
     /// <seealso cref="BolRetailerAPI.Services.ITokenService" />
     public class TokenService : ClientBase, ITokenService
     {
+        /// <summary>
+        /// API credentials DTO, only used within this class.
+        /// </summary>
+        internal class ApiCredentials
+        {
+            public string ClientId { get; set; }
+            public string ClientSecret { get; set; }
+    }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TokenService"/> class.
         /// </summary>
@@ -30,10 +42,10 @@ namespace BolRetailerAPI.Services
         /// <returns></returns>
         public async Task<Token> GetTokenAsync(string clientId, string clientSecret)
         {
-            var postObject = new
+            var postObject = new ApiCredentials()
             {
-                client_id = clientId,
-                client_secret = clientSecret
+                ClientId = clientId,
+                ClientSecret = clientSecret
             };
 
             return await GetApiResult<Token>(
@@ -41,6 +53,26 @@ namespace BolRetailerAPI.Services
                 $"{EndPoints.BaseUriLogin}{EndPoints.Token}",
                 postObject
             );
+        }
+
+        /// <summary>
+        /// Set Basic authorization to fetch the token.
+        /// </summary>
+        /// <param name="httpMethod">The HTTP method.</param>
+        /// <param name="endPoint">The end point.</param>
+        /// <param name="post">The post.</param>
+        /// <returns></returns>
+        protected override async Task<HttpRequestMessage> GetHttpRequestMessage(HttpMethod httpMethod, string endPoint, object post = null)
+        {
+            var result = await base.GetHttpRequestMessage(httpMethod, endPoint);
+            var credentials = (ApiCredentials)post;
+
+            result.Headers.Authorization = new AuthenticationHeaderValue(
+                "Basic",
+                Convert.ToBase64String(Encoding.ASCII.GetBytes($"{credentials.ClientId}:{credentials.ClientSecret}"))
+            );
+
+            return result;
         }
     }
 }
