@@ -37,7 +37,7 @@ namespace BolRetailerAPI.AuthorizationToken
         /// </returns>
         public bool IsValid()
         {
-            return _token != default;
+            return _token != default && _token.ExpiresAt > DateTime.Now;
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace BolRetailerAPI.AuthorizationToken
             if (!IsValid())
                 await RefreshAsync();
 
-            throw new NotImplementedException();
+            return _token.access_token;
         }
     }
 }
