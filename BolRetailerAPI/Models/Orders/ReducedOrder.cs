@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BolRetailerAPI.Models
+namespace BolRetailerAPI.Models.Orders
 {
     /// <summary>
     /// Reduced Order model

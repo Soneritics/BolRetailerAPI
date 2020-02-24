@@ -1,4 +1,4 @@
-﻿namespace BolRetailerAPI.Models
+﻿namespace BolRetailerAPI.Models.Orders
 {
     /// <summary>
     /// Reduced Order Item model

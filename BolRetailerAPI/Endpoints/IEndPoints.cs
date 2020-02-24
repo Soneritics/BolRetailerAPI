@@ -10,5 +10,6 @@
 
         string Token { get; }
         string OpenOrders { get; }
+        string SingleOrder { get; }
     }
 }

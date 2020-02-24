@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using BolRetailerAPI.AuthorizationToken;
 using BolRetailerAPI.Client;
 using BolRetailerAPI.Endpoints;
-using BolRetailerAPI.Models;
+using BolRetailerAPI.Models.Orders;
 
 namespace BolRetailerAPI.Services
 {
@@ -44,6 +44,19 @@ namespace BolRetailerAPI.Services
             );
 
             return result.orders;
+        }
+
+        /// <summary>
+        /// Gets a single order asynchronous.
+        /// </summary>
+        /// <param name="orderId">The order identifier.</param>
+        /// <returns></returns>
+        public async Task<Order> GetOrderAsync(string orderId)
+        {
+            return await GetApiResult<Order>(
+                HttpMethod.Get,
+                $"{EndPoints.BaseUriApiCalls}{EndPoints.SingleOrder}{orderId}"
+            );
         }
     }
 }
