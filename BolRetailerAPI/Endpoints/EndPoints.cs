@@ -8,9 +8,10 @@ namespace BolRetailerAPI.EndPoints
     /// <seealso cref="BolRetailerAPI.Endpoints.IEndPoints" />
     public class EndPoints : IEndPoints
     {
-        public string BaseUriLogin { get; } = "https://login.bol.com/";
-        public string BaseUriApiCalls { get; } = "https://api.bol.com/";
+        public virtual string BaseUriLogin { get; } = "https://login.bol.com/";
+        public virtual string BaseUriApiCalls { get; } = "https://api.bol.com/";
 
         public string Token { get; } = "token?grant_type=client_credentials";
+        public string OpenOrders { get; } = "orders?fulfilment-method=FBR";
     }
 }

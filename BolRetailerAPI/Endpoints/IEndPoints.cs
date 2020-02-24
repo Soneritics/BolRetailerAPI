@@ -9,5 +9,6 @@
         string BaseUriApiCalls { get; }
 
         string Token { get; }
+        string OpenOrders { get; }
     }
 }
