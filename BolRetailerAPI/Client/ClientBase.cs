@@ -25,12 +25,10 @@ namespace BolRetailerAPI.Client
         /// </summary>
         /// <param name="httpClient">The HTTP client.</param>
         /// <param name="endPoints">The end points.</param>
-        public ClientBase(HttpClient httpClient, IEndPoints endPoints)
+        protected ClientBase(HttpClient httpClient, IEndPoints endPoints)
         {
             HttpClient = httpClient;
             EndPoints = endPoints;
-
-            HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         /// <summary>
@@ -60,6 +58,7 @@ namespace BolRetailerAPI.Client
             return await Task.Run(() =>
             {
                 var result = new HttpRequestMessage(httpMethod, endPoint);
+                result.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 if (post != null)
                     result.Content = new StringContent(JsonConvert.SerializeObject(post));
@@ -79,19 +78,17 @@ namespace BolRetailerAPI.Client
             LastRequestStatus = httpResponseMessage.StatusCode;
 
             if (!httpResponseMessage.IsSuccessStatusCode)
-                ThrowHttpException(httpResponseMessage);
+                throw await GetHttpException(httpResponseMessage);
 
             return await GetDeserializedResponse<TResult>(httpResponseMessage);
         }
 
         /// <summary>
-        /// Throws the HTTP exception, based on the Http header the API sent.
+        /// Gets the HTTP exception.
         /// </summary>
         /// <param name="httpResponseMessage">The HTTP response message.</param>
-        /// <exception cref="BolRetailerAPI.Exceptions.UnauthorizedException"></exception>
-        /// <exception cref="BolRetailerAPI.Exceptions.TooManyRequestsException"></exception>
-        /// <exception cref="System.Exception">HttpRequestException occured with message '{LastError.error_description}'</exception>
-        protected async void ThrowHttpException(HttpResponseMessage httpResponseMessage)
+        /// <returns></returns>
+        protected async Task<Exception> GetHttpException(HttpResponseMessage httpResponseMessage)
         {
             // First set the error message so it can be retrieved
             LastError = await GetDeserializedResponse<Error>(httpResponseMessage);
@@ -101,19 +98,26 @@ namespace BolRetailerAPI.Client
             switch (httpResponseMessage.StatusCode)
             {
                 case HttpStatusCode.Unauthorized:
-                    throw new UnauthorizedException();
+                    return new UnauthorizedException();
 
                 case HttpStatusCode.TooManyRequests:
-                    throw new TooManyRequestsException();
+                    return new TooManyRequestsException();
 
                 // For every other unsuccessful HTTP code, throw an HttpRequestException
                 default:
-                    httpResponseMessage.EnsureSuccessStatusCode();
+                    try
+                    {
+                        httpResponseMessage.EnsureSuccessStatusCode();
+                    }
+                    catch (Exception e)
+                    {
+                        return e;
+                    }
                     break;
             }
 
             // This should not happen
-            throw new Exception($"HttpRequestException occured with message '{LastError.error_description}'");
+            return new Exception($"HttpRequestException occured with message '{LastError.error_description}'");
         }
 
         /// <summary>
@@ -125,7 +129,15 @@ namespace BolRetailerAPI.Client
         protected async Task<TResult> GetDeserializedResponse<TResult>(HttpResponseMessage httpResponseMessage)
         {
             var msgString = await httpResponseMessage.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<TResult>(msgString);
+
+            try
+            {
+                return JsonConvert.DeserializeObject<TResult>(msgString);
+            }
+            catch
+            {
+                return default;
+            }
         }
     }
 }
