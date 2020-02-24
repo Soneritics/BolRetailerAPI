@@ -36,11 +36,13 @@ namespace BolRetailerAPI.Client
         {
             var result = await base.GetHttpRequestMessage(httpMethod, endPoint, post);
 
+            result.Headers.Accept.Clear();
+            result.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.retailer.v3+json"));
             result.Headers.Authorization = new AuthenticationHeaderValue(
                 "Bearer",
                 await _authorizationToken.GetAuthenticationBearerAsync()
             );
-
+            
             return result;
         }
     }
