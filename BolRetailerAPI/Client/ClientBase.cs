@@ -43,6 +43,7 @@ namespace BolRetailerAPI.Client
         {
             var request = await GetHttpRequestMessage(httpMethod, endPoint, post);
             var apiResult = await HttpClient.SendAsync(request);
+            ProcessHttpHeaders(apiResult);
             return await GetProcessedResult<TResult>(apiResult);
         }
 
@@ -68,6 +69,15 @@ namespace BolRetailerAPI.Client
         }
 
         /// <summary>
+        /// Processes the HTTP headers.
+        /// </summary>
+        /// <param name="httpResponseMessage">The HTTP response message.</param>
+        protected virtual void ProcessHttpHeaders(HttpResponseMessage httpResponseMessage)
+        {
+            LastRequestStatus = httpResponseMessage.StatusCode;
+        }
+
+        /// <summary>
         /// Gets the processed (deserialized) result.
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>
@@ -75,8 +85,6 @@ namespace BolRetailerAPI.Client
         /// <returns></returns>
         protected async Task<TResult> GetProcessedResult<TResult>(HttpResponseMessage httpResponseMessage)
         {
-            LastRequestStatus = httpResponseMessage.StatusCode;
-
             if (!httpResponseMessage.IsSuccessStatusCode)
                 throw await GetHttpException(httpResponseMessage);
 

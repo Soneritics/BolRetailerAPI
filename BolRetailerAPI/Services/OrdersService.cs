@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BolRetailerAPI.AuthorizationToken;
 using BolRetailerAPI.Client;
 using BolRetailerAPI.Endpoints;
+using BolRetailerAPI.Models;
 using BolRetailerAPI.Models.Orders;
 
 namespace BolRetailerAPI.Services
@@ -15,12 +16,13 @@ namespace BolRetailerAPI.Services
     public class OrdersService : AuthenticatedClientBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OrdersService"/> class.
+        /// Initializes a new instance of the <see cref="OrdersService" /> class.
         /// </summary>
         /// <param name="httpClient">The HTTP client.</param>
         /// <param name="endPoints">The end points.</param>
         /// <param name="authorizationToken">The authorization token.</param>
-        public OrdersService(HttpClient httpClient, IEndPoints endPoints, IAuthorizationToken authorizationToken) : base(httpClient, endPoints, authorizationToken)
+        /// <param name="rateLimits">The rate limits.</param>
+        public OrdersService(HttpClient httpClient, IEndPoints endPoints, IAuthorizationToken authorizationToken, RateLimits rateLimits = null) : base(httpClient, endPoints, authorizationToken, rateLimits)
         {
         }
 
