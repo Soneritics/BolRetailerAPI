@@ -1,5 +1,5 @@
 ﻿[![Build Status](https://soneritics.visualstudio.com/Bol%20Retailer%20API/_apis/build/status/Soneritics.BolRetailerAPI?branchName=master)](https://soneritics.visualstudio.com/Bol%20Retailer%20API/_build/latest?definitionId=2&branchName=master)
-[!License](http://img.shields.io/badge/license-MIT-green.svg)
+![License](http://img.shields.io/badge/license-MIT-green.svg)
 
 # BolRetailerAPI
 Bol.com Retailer API NuGet package.
