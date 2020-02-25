@@ -35,5 +35,13 @@ namespace BolRetailerAPI
         /// The token service.
         /// </value>
         public ITokenService TokenService => new TokenService(_httpClient, _endPoints);
+
+        /// <summary>
+        /// Gets the orders service.
+        /// </summary>
+        /// <value>
+        /// The orders service.
+        /// </value>
+        public OrdersService OrdersService => new OrdersService(_httpClient, _endPoints, _authorizationToken);
     }
 }
