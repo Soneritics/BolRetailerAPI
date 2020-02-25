@@ -31,8 +31,9 @@ steps:
     projects: '**/BolRetailerAPI.csproj'
 
 - task: NuGetCommand@2
+  displayName: Push
   inputs:
-    command: Push
+    command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
     nuGetFeedType: 'external'
     publishFeedCredentials: 'NuGet'
