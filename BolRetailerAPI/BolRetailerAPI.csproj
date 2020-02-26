@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>BolRetailerAPI</PackageId>
-    <Version>0.1.0-beta</Version>
+    <Version>0.2.0-beta</Version>
     <Authors>Soneritics</Authors>
     <Description>Retailer API for Bol.com</Description>
     <IsPackable>true</IsPackable>
