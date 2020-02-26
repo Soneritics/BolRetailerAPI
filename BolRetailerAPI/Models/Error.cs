@@ -1,4 +1,7 @@
-﻿namespace BolRetailerAPI.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace BolRetailerAPI.Models
 {
     public class Error
     {
@@ -10,5 +13,6 @@
         public string detail { get; set; }
         public string host { get; set; }
         public string instance { get; set; }
+        public List<Violation> violations { get; set; }
     }
 }
