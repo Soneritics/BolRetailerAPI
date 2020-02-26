@@ -5,9 +5,9 @@ namespace BolRetailerAPI.Models.Orders
 {
     public class Order
     {
-        public string orderId { get; set; }
-        public DateTime dateTimeOrderPlaced { get; set; }
-        public CustomerOrderDetails customerDetails { get; set; }
-        public List<OrderItem> orderItems { get; set; }
+        public string OrderId { get; set; }
+        public DateTime DateTimeOrderPlaced { get; set; }
+        public CustomerOrderDetails CustomerDetails { get; set; }
+        public List<OrderItem> OrderItems { get; set; }
     }
 }
