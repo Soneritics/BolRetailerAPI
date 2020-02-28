@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BolRetailerAPI.AuthorizationToken;
 using BolRetailerAPI.Client;
 using BolRetailerAPI.Endpoints;
+using BolRetailerAPI.Enum;
+using BolRetailerAPI.Exceptions;
 using BolRetailerAPI.Models;
 using BolRetailerAPI.Models.Orders;
 
@@ -59,6 +63,50 @@ namespace BolRetailerAPI.Services
                 HttpMethod.Get,
                 $"{EndPoints.BaseUriApiCalls}{EndPoints.SingleOrder}{orderId}"
             );
+        }
+
+        /// <summary>
+        /// Cancels an order item asynchronous.
+        /// </summary>
+        /// <param name="orderItemId">The order item identifier.</param>
+        /// <param name="cancellationReason">The cancellation reason.</param>
+        /// <returns></returns>
+        public async Task<StatusResponse> CancelOrderItemAsync(string orderItemId, CancellationReason cancellationReason = null)
+        {
+            if (cancellationReason == default)
+                cancellationReason = new CancellationReason();
+
+            return await GetApiResult<StatusResponse>(
+                HttpMethod.Put,
+                $"{EndPoints.BaseUriApiCalls}{EndPoints.SingleOrder}{orderItemId}/cancellation",
+                new { reasonCode = cancellationReason.ReasonValue }
+            );
+        }
+
+        /// <summary>
+        /// Cancels a complete order asynchronous.
+        /// </summary>
+        /// <param name="orderId">The order identifier.</param>
+        /// <param name="cancellationReason">The cancellation reason.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception">No order items found.</exception>
+        public async Task<List<StatusResponse>> CancelOrderAsync(string orderId, CancellationReason cancellationReason = null)
+        {
+            var order = await GetOrderAsync(orderId);
+            var result = new List<StatusResponse>();
+
+            if (order?.OrderItems?.Any() != true)
+                throw new NoOrderItemsInOrderException($"No order items found in order {orderId}.");
+
+            var taskList = order.OrderItems.Select(
+                oi => Task.Run(async () =>
+                {
+                    result.Add(await CancelOrderItemAsync(oi.OrderItemId, cancellationReason));
+                })
+            );
+            await Task.WhenAll(taskList);
+
+            return result;
         }
     }
 }
