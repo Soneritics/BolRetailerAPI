@@ -10,6 +10,7 @@ using BolRetailerAPI.Enum;
 using BolRetailerAPI.Exceptions;
 using BolRetailerAPI.Models;
 using BolRetailerAPI.Models.Orders;
+using BolRetailerAPI.Models.Requests;
 
 namespace BolRetailerAPI.Services
 {
@@ -93,15 +94,54 @@ namespace BolRetailerAPI.Services
         public async Task<List<StatusResponse>> CancelOrderAsync(string orderId, CancellationReason cancellationReason = null)
         {
             var order = await GetOrderAsync(orderId);
-            var result = new List<StatusResponse>();
-
             if (order?.OrderItems?.Any() != true)
                 throw new NoOrderItemsInOrderException($"No order items found in order {orderId}.");
 
+            var result = new List<StatusResponse>();
             var taskList = order.OrderItems.Select(
                 oi => Task.Run(async () =>
                 {
                     result.Add(await CancelOrderItemAsync(oi.OrderItemId, cancellationReason));
+                })
+            );
+            await Task.WhenAll(taskList);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Sends shipping information of an order item asynchronous.
+        /// </summary>
+        /// <param name="orderItemId">The order item identifier.</param>
+        /// <param name="shipmentData">The shipment data.</param>
+        /// <returns></returns>
+        public async Task<StatusResponse> ShipOrderItemAsync(string orderItemId, ShipmentData shipmentData)
+        {
+            return await GetApiResult<StatusResponse>(
+                HttpMethod.Put,
+                $"{EndPoints.BaseUriApiCalls}{EndPoints.SingleOrder}{orderItemId}/shipment",
+                shipmentData
+            );
+        }
+
+        /// <summary>
+        /// Sends shipping information of an order asynchronous.
+        /// </summary>
+        /// <param name="orderId">The order identifier.</param>
+        /// <param name="shipmentData">The shipment data.</param>
+        /// <returns></returns>
+        /// <exception cref="NoOrderItemsInOrderException">No order items found in order {orderId}.</exception>
+        public async Task<List<StatusResponse>> ShipOrderAsync(string orderId, ShipmentData shipmentData)
+        {
+            var order = await GetOrderAsync(orderId);
+            if (order?.OrderItems?.Any() != true)
+                throw new NoOrderItemsInOrderException($"No order items found in order {orderId}.");
+
+            var result = new List<StatusResponse>();
+            var taskList = order.OrderItems.Select(
+                oi => Task.Run(async () =>
+                {
+                    result.Add(await ShipOrderItemAsync(oi.OrderItemId, shipmentData));
                 })
             );
             await Task.WhenAll(taskList);
