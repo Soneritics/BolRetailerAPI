@@ -62,7 +62,10 @@ namespace BolRetailerAPI.Client
                 result.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 if (post != null)
+                {
                     result.Content = new StringContent(JsonConvert.SerializeObject(post));
+                    result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.retailer.v3+json");
+                }
 
                 return result;
             });

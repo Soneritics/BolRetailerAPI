@@ -23,6 +23,21 @@ var orders = await bolApi.OrdersService.GetOpenOrdersAsync();
 
 // Get all the info of a specific order
 var singleOrder = await bolApi.OrdersService.GetOrderAsync(orders.First().orderId);
+
+// Set shipment for a complete order
+var shippedOrder = bolApi.OrdersService.ShipOrderAsync(
+    order.OrderId,
+    new ShipmentData()
+    {
+        ShipmentReference = "Reference for shipping",
+        ShippingLabelCode = "ShipLabelCode",
+        Transport = new TransportInstruction()
+        {
+            TrackAndTrace = "BOL12343955DE",
+            TransporterCode = TransporterCode.ParcelNl
+        }
+    }
+);
 ```
 
 ## Current implementation status
@@ -34,7 +49,7 @@ var singleOrder = await bolApi.OrdersService.GetOrderAsync(orders.First().orderI
 | Inventory                                     |             |
 | Invoices                                      |             |
 | Offers                                        |             |
-| Orders                                        |      ✓     |
+| Orders                                        |     1.0     |
 | Process Status                                |             |
 | Reductions                                    |             |
 | Returns                                       |             |

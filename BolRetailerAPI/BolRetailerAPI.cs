@@ -12,8 +12,8 @@ namespace BolRetailerAPI
     public class BolRetailerApi
     {
         public RateLimits RateLimits { get; }
+        protected readonly IEndPoints EndPoints;
         private readonly AuthorizationToken.AuthorizationToken _authorizationToken;
-        private readonly IEndPoints _endPoints;
         private readonly HttpClient _httpClient;
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace BolRetailerAPI
         public BolRetailerApi(string clientId, string clientSecret, bool testMode = false)
         {
             RateLimits = new RateLimits();
-            _endPoints = testMode ? new TestEndPoints() : new EndPoints.EndPoints();
+            EndPoints = testMode ? new TestEndPoints() : new EndPoints.EndPoints();
             _httpClient = new HttpClient();
             _authorizationToken = new AuthorizationToken.AuthorizationToken(clientId, clientSecret, TokenService);
         }
@@ -37,7 +37,8 @@ namespace BolRetailerAPI
         /// <value>
         /// The token service.
         /// </value>
-        public ITokenService TokenService => new TokenService(_httpClient, _endPoints);
+        private ITokenService _tokenService;
+        public ITokenService TokenService => _tokenService ??= new TokenService(_httpClient, EndPoints);
 
         /// <summary>
         /// Gets the orders service.
@@ -45,6 +46,7 @@ namespace BolRetailerAPI
         /// <value>
         /// The orders service.
         /// </value>
-        public OrdersService OrdersService => new OrdersService(_httpClient, _endPoints, _authorizationToken, RateLimits);
+        private OrdersService _ordersService;
+        public OrdersService OrdersService => _ordersService ??= new OrdersService(_httpClient, EndPoints, _authorizationToken, RateLimits);
     }
 }

@@ -8,8 +8,8 @@ namespace BolRetailerAPI.Models.Orders
     /// </summary>
     public class ReducedOrder
     {
-        public string orderId { get; set; }
-        public DateTime dateTimeOrderPlaced { get; set; }
-        public List<ReducedOrderItem> orderItems { get; set; }
+        public string OrderId { get; set; }
+        public DateTime DateTimeOrderPlaced { get; set; }
+        public List<ReducedOrderItem> OrderItems { get; set; }
     }
 }

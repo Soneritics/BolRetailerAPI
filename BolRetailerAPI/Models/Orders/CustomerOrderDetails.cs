@@ -2,7 +2,7 @@
 {
     public class CustomerOrderDetails
     {
-        public CustomerDetails shipmentDetails { get; set; }
-        public CustomerDetails billingDetails { get; set; }
+        public CustomerDetails ShipmentDetails { get; set; }
+        public CustomerDetails BillingDetails { get; set; }
     }
 }
