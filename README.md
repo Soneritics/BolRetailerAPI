@@ -22,10 +22,10 @@ var bolApi = new BolRetailerApi(clientId, clientSecret, testMode);
 var orders = await bolApi.OrdersService.GetOpenOrdersAsync();
 
 // Get all the info of a specific order
-var singleOrder = await bolApi.OrdersService.GetOrderAsync(orders.First().orderId);
+var singleOrder = await bolApi.OrdersService.GetOrderAsync(orders.First().OrderId);
 
 // Set shipment for a complete order
-var shippedOrder = bolApi.OrdersService.ShipOrderAsync(
+var shippedOrder = await bolApi.OrdersService.ShipOrderAsync(
     order.OrderId,
     new ShipmentData()
     {
@@ -38,6 +38,12 @@ var shippedOrder = bolApi.OrdersService.ShipOrderAsync(
         }
     }
 );
+
+// Get a list of shipment details
+var shippedOrderDetails = await bolApi.ShipmentService.GetShipmentListAsync(order.OrderId);
+
+// Get full detaild of a shipment
+var shipmentDetails = await api.ShipmentService.GetShipmentByIdAsync(shipmentId);
 ```
 
 ## Current implementation status
@@ -53,6 +59,6 @@ var shippedOrder = bolApi.OrdersService.ShipOrderAsync(
 | Process Status                                |             |
 | Reductions                                    |             |
 | Returns                                       |             |
-| Shipments                                     |             |
+| Shipments                                     |     1.2     |
 | Shipping labels                               |             |
 | Transports                                    |             |

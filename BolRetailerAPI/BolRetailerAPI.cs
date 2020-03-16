@@ -48,5 +48,14 @@ namespace BolRetailerAPI
         /// </value>
         private OrdersService _ordersService;
         public OrdersService OrdersService => _ordersService ??= new OrdersService(_httpClient, EndPoints, _authorizationToken, RateLimits);
+
+        /// <summary>
+        /// Gets the shipment service.
+        /// </summary>
+        /// <value>
+        /// The shipment service.
+        /// </value>
+        private ShipmentService _shipmentService;
+        public ShipmentService ShipmentService => _shipmentService ??= new ShipmentService(_httpClient, EndPoints, _authorizationToken, RateLimits);
     }
 }

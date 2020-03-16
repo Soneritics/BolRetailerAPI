@@ -14,5 +14,6 @@ namespace BolRetailerAPI.EndPoints
         public string Token { get; } = "token?grant_type=client_credentials";
         public string OpenOrders { get; } = "orders?fulfilment-method=FBR";
         public string SingleOrder { get; } = "orders/";
+        public string Shipments { get; } = "shipments";
     }
 }
