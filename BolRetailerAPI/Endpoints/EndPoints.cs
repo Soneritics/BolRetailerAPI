@@ -12,7 +12,7 @@ namespace BolRetailerAPI.EndPoints
         public virtual string BaseUriApiCalls { get; } = "https://api.bol.com/retailer/";
 
         public string Token { get; } = "token?grant_type=client_credentials";
-        public string OpenOrders { get; } = "orders?fulfilment-method=FBR";
+        public string OpenOrders { get; } = "orders";
         public string SingleOrder { get; } = "orders/";
         public string Shipments { get; } = "shipments";
     }

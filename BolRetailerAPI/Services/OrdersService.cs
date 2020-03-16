@@ -36,21 +36,22 @@ namespace BolRetailerAPI.Services
         /// </summary>
         internal class OpenOrdersResponse
         {
-            public List<ReducedOrder> orders { get; set; }
+            public List<ReducedOrder> Orders { get; set; }
         }
 
         /// <summary>
         /// Gets the open orders asynchronous.
         /// </summary>
+        /// <param name="page">The page.</param>
         /// <returns></returns>
-        public async Task<List<ReducedOrder>> GetOpenOrdersAsync()
+        public async Task<List<ReducedOrder>> GetOpenOrdersAsync(int page = 1)
         {
             var result = await GetApiResult<OpenOrdersResponse>(
                 HttpMethod.Get,
-                $"{EndPoints.BaseUriApiCalls}{EndPoints.OpenOrders}"
+                $"{EndPoints.BaseUriApiCalls}{EndPoints.OpenOrders}?fulfilment-method=FBR&page={page}"
             );
 
-            return result.orders;
+            return result.Orders;
         }
 
         /// <summary>
