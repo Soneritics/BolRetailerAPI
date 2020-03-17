@@ -60,14 +60,15 @@ namespace BolRetailerAPI.Client
         protected override void ProcessHttpHeaders(HttpResponseMessage httpResponseMessage)
         {
             base.ProcessHttpHeaders(httpResponseMessage);
-
+            
             if (httpResponseMessage.Headers.Contains("x-ratelimit-remaining"))
             {
                 RateLimits = new RateLimits()
                 {
                     Remaining = int.Parse(httpResponseMessage.Headers.GetValues("x-ratelimit-remaining").First()),
                     Limit = int.Parse(httpResponseMessage.Headers.GetValues("x-ratelimit-limit").First()),
-                    ResetsAt = DateTime.Now.AddSeconds(int.Parse(httpResponseMessage.Headers.GetValues("x-ratelimit-reset").First()))
+                    ResetsAt = DateTime.Now.AddSeconds(int.Parse(httpResponseMessage.Headers.GetValues("x-ratelimit-reset").First())),
+                    RetryAfter = httpResponseMessage.Headers.RetryAfter?.Delta?.Seconds ?? null
                 };
             }
         }

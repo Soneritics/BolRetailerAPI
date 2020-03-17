@@ -10,6 +10,7 @@ namespace BolRetailerAPI.Models
         public int Limit { get; set; }
         public int Remaining { get; set; }
         public DateTime ResetsAt { get; set; } = DateTime.Now;
+        public int? RetryAfter { get; set; }
 
         /// <summary>
         /// Determines whether the current rate limit is (still) valid or that is already has been reset.
