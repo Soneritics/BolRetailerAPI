@@ -68,7 +68,18 @@ namespace BolRetailerAPI.Client
                     Remaining = int.Parse(httpResponseMessage.Headers.GetValues("x-ratelimit-remaining").First()),
                     Limit = int.Parse(httpResponseMessage.Headers.GetValues("x-ratelimit-limit").First()),
                     ResetsAt = DateTime.Now.AddSeconds(int.Parse(httpResponseMessage.Headers.GetValues("x-ratelimit-reset").First())),
-                    RetryAfter = httpResponseMessage.Headers.RetryAfter?.Delta?.Seconds ?? null
+                    RetryAfter = httpResponseMessage.Headers.RetryAfter?.Delta?.Seconds
+                };
+            }
+            else if (httpResponseMessage.Headers.RetryAfter != null)
+            {
+                var retryAfter = httpResponseMessage.Headers.RetryAfter?.Delta?.Seconds ?? 10;
+                RateLimits = new RateLimits()
+                {
+                    Remaining = 0,
+                    Limit = 0,
+                    ResetsAt = DateTime.Now.AddSeconds(retryAfter),
+                    RetryAfter = retryAfter
                 };
             }
         }
