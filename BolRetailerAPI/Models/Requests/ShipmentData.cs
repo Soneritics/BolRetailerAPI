@@ -6,7 +6,6 @@
     public class ShipmentData
     {
         public string ShipmentReference { get; set; }
-        public string ShippingLabelCode { get; set; }
         public TransportInstruction Transport { get; set; }
     }
 }

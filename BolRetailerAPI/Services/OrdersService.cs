@@ -121,7 +121,14 @@ namespace BolRetailerAPI.Services
             return await GetApiResult<StatusResponse>(
                 HttpMethod.Put,
                 $"{EndPoints.BaseUriApiCalls}{EndPoints.SingleOrder}{orderItemId}/shipment",
-                shipmentData
+                new
+                {
+                    shipmentReference = shipmentData.ShipmentReference,
+                    transport = new {
+                        transporterCode = shipmentData.Transport.TransporterCode.TransporterCodeValue,
+                        trackAndTrace = shipmentData.Transport.TrackAndTrace
+                    }
+                }
             );
         }
 
