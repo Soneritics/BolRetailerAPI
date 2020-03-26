@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BolRetailerAPI.Models
 {
@@ -11,5 +12,6 @@ namespace BolRetailerAPI.Models
         public string Status { get; set; }
         public string ErrorMessage { get; set; }
         public DateTime CreateTimestamp { get; set; }
+        public List<Link> Links { get; set; }
     }
 }
