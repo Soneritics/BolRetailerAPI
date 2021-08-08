@@ -9,7 +9,7 @@
         string BaseUriApiCalls { get; }
 
         string Token { get; }
-        string OpenOrders { get; }
+        string Orders { get; }
         string SingleOrder { get; }
         string Shipments { get; }
     }

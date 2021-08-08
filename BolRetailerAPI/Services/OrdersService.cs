@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using BolRetailerAPI.AuthorizationToken;
 using BolRetailerAPI.Client;
 using BolRetailerAPI.Endpoints;
-using BolRetailerAPI.Enum;
 using BolRetailerAPI.Exceptions;
-using BolRetailerAPI.Models;
-using BolRetailerAPI.Models.Orders;
-using BolRetailerAPI.Models.Requests;
+using BolRetailerAPI.Models.Authorization;
+using BolRetailerAPI.Models.Enum;
+using BolRetailerAPI.Models.Request;
+using BolRetailerAPI.Models.Response;
+using BolRetailerAPI.Models.Response.Orders;
+using BolRetailerAPI.Models.Status;
 
 namespace BolRetailerAPI.Services
 {
     /// <summary>
     /// Orders API Service
     /// </summary>
-    /// <seealso cref="BolRetailerAPI.Client.AuthenticatedClientBase" />
+    /// <seealso cref="AuthenticatedClientBase" />
     public class OrdersService : AuthenticatedClientBase
     {
         /// <summary>
@@ -27,38 +27,46 @@ namespace BolRetailerAPI.Services
         /// <param name="endPoints">The end points.</param>
         /// <param name="authorizationToken">The authorization token.</param>
         /// <param name="rateLimits">The rate limits.</param>
-        public OrdersService(HttpClient httpClient, IEndPoints endPoints, IAuthorizationToken authorizationToken, RateLimits rateLimits = null) : base(httpClient, endPoints, authorizationToken, rateLimits)
+        public OrdersService(
+            HttpClient httpClient,
+            IEndPoints endPoints,
+            IAuthorizationToken authorizationToken,
+            RateLimits rateLimits = null)
+            : base(httpClient, endPoints, authorizationToken, rateLimits)
         {
         }
 
         /// <summary>
-        /// Internal class to map the open orders request.
-        /// </summary>
-        internal class OpenOrdersResponse
-        {
-            public List<ReducedOrder> Orders { get; set; }
-        }
-
-        /// <summary>
-        /// Gets the open orders asynchronous.
+        /// Gets the orders from the API.
         /// </summary>
         /// <param name="page">The page.</param>
-        /// <returns></returns>
-        public async Task<List<ReducedOrder>> GetOpenOrdersAsync(int page = 1)
+        /// <param name="onlyOpenOrders">if set to <c>true</c> [only open orders].</param>
+        /// <param name="method">The method to handle the shipping (BOL/Retailer).</param>
+        /// <returns>List of (reduced) orders.</returns>
+        public async Task<IEnumerable<ReducedOrder>> GetOrdersAsync(
+            int page = 1,
+            bool onlyOpenOrders = false,
+            Method method = Method.FBR)
         {
-            var result = await GetApiResult<OpenOrdersResponse>(
-                HttpMethod.Get,
-                $"{EndPoints.BaseUriApiCalls}{EndPoints.OpenOrders}?fulfilment-method=FBR&page={page}"
-            );
+            var status = onlyOpenOrders ? "OPEN" : "ALL";
+            var fulfilmentMethod = method == Method.FBR ? "FBR" : "FBB";
+
+            var url =
+                $"{EndPoints.BaseUriApiCalls}{EndPoints.Orders}?" +
+                $"fulfilment-method={fulfilmentMethod}" +
+                $"&status={status}" +
+                $"&page={page}";
+
+            var result = await GetApiResult<OrdersResponse>(HttpMethod.Get, url);
 
             return result.Orders;
         }
 
         /// <summary>
-        /// Gets a single order asynchronous.
+        /// Gets a single order's details.
         /// </summary>
         /// <param name="orderId">The order identifier.</param>
-        /// <returns></returns>
+        /// <returns>An Order entity.</returns>
         public async Task<Order> GetOrderAsync(string orderId)
         {
             return await GetApiResult<Order>(
@@ -68,93 +76,191 @@ namespace BolRetailerAPI.Services
         }
 
         /// <summary>
-        /// Cancels an order item asynchronous.
-        /// </summary>
-        /// <param name="orderItemId">The order item identifier.</param>
-        /// <param name="cancellationReason">The cancellation reason.</param>
-        /// <returns></returns>
-        public async Task<StatusResponse> CancelOrderItemAsync(string orderItemId, CancellationReason cancellationReason = null)
-        {
-            if (cancellationReason == default)
-                cancellationReason = new CancellationReason();
-
-            return await GetApiResult<StatusResponse>(
-                HttpMethod.Put,
-                $"{EndPoints.BaseUriApiCalls}{EndPoints.SingleOrder}{orderItemId}/cancellation",
-                new { reasonCode = cancellationReason.ReasonValue }
-            );
-        }
-
-        /// <summary>
-        /// Cancels a complete order asynchronous.
+        /// Gets the order item ids from the items of an order.
         /// </summary>
         /// <param name="orderId">The order identifier.</param>
-        /// <param name="cancellationReason">The cancellation reason.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception">No order items found.</exception>
-        public async Task<List<StatusResponse>> CancelOrderAsync(string orderId, CancellationReason cancellationReason = null)
+        /// <returns>List of ids.</returns>
+        public async Task<IEnumerable<string>> GetOrderItemIdsAsync(string orderId)
         {
             var order = await GetOrderAsync(orderId);
-            if (order?.OrderItems?.Any() != true)
-                throw new NoOrderItemsInOrderException($"No order items found in order {orderId}.");
-
-            var result = new List<StatusResponse>();
-            var taskList = order.OrderItems.Select(
-                oi => Task.Run(async () =>
-                {
-                    result.Add(await CancelOrderItemAsync(oi.OrderItemId, cancellationReason));
-                })
-            );
-            await Task.WhenAll(taskList);
-
-            return result;
+            
+            return order?.OrderItems?.Any() != true
+                ? default
+                : order.OrderItems.Select(oi => oi.OrderItemId);
         }
 
         /// <summary>
-        /// Sends shipping information of an order item asynchronous.
+        /// Cancels the specified order items from ONE order.
         /// </summary>
-        /// <param name="orderItemId">The order item identifier.</param>
-        /// <param name="shipmentData">The shipment data.</param>
-        /// <returns></returns>
-        public async Task<StatusResponse> ShipOrderItemAsync(string orderItemId, ShipmentData shipmentData)
+        /// <param name="orderItemIds">The order item ids.</param>
+        /// <param name="cancellationReason">The cancellation reason.</param>
+        /// <returns>StatusResponse.</returns>
+        public async Task<StatusResponse> CancelOrderItemsAsync(
+            IEnumerable<string> orderItemIds,
+            CancellationReason cancellationReason = null)
         {
+            cancellationReason ??= new CancellationReason();
+            var cancellationList = orderItemIds
+                .Select(oi => new OrderItemCancellation()
+                {
+                    OrderItemId = oi,
+                    ReasonCode = cancellationReason.ReasonValue
+                });
+
             return await GetApiResult<StatusResponse>(
                 HttpMethod.Put,
-                $"{EndPoints.BaseUriApiCalls}{EndPoints.SingleOrder}{orderItemId}/shipment",
-                new
-                {
-                    shipmentReference = shipmentData.ShipmentReference,
-                    transport = new {
-                        transporterCode = shipmentData.Transport.TransporterCode.TransporterCodeValue,
-                        trackAndTrace = shipmentData.Transport.TrackAndTrace
-                    }
-                }
+                $"{EndPoints.BaseUriApiCalls}{EndPoints.Orders}/cancellation",
+                cancellationList
             );
         }
 
         /// <summary>
-        /// Sends shipping information of an order asynchronous.
+        /// Cancels a single order item.
+        /// </summary>
+        /// <param name="orderItemId">The order item identifier.</param>
+        /// <param name="cancellationReason">The cancellation reason.</param>
+        /// <returns>StatusResponse.</returns>
+        public async Task<StatusResponse> CancelOrderItemAsync(
+            string orderItemId,
+            CancellationReason cancellationReason = null)
+        {
+            return await CancelOrderItemsAsync(
+                new [] { orderItemId },
+                cancellationReason
+            );
+        }
+
+        /// <summary>
+        /// Cancels a complete the order.
+        /// To do this, first the detailed order info is fetched.
+        /// Keep this into account with the rate limits.
         /// </summary>
         /// <param name="orderId">The order identifier.</param>
-        /// <param name="shipmentData">The shipment data.</param>
-        /// <returns></returns>
+        /// <param name="cancellationReason">The cancellation reason.</param>
+        /// <returns>StatusResponse.</returns>
         /// <exception cref="NoOrderItemsInOrderException">No order items found in order {orderId}.</exception>
-        public async Task<List<StatusResponse>> ShipOrderAsync(string orderId, ShipmentData shipmentData)
+        public async Task<StatusResponse> CancelOrderAsync(
+            string orderId,
+            CancellationReason cancellationReason = null)
         {
-            var order = await GetOrderAsync(orderId);
-            if (order?.OrderItems?.Any() != true)
+            var orderItemIds = await GetOrderItemIdsAsync(orderId);
+            if (orderItemIds?.Any() != true)
                 throw new NoOrderItemsInOrderException($"No order items found in order {orderId}.");
 
-            var result = new List<StatusResponse>();
-            var taskList = order.OrderItems.Select(
-                oi => Task.Run(async () =>
-                {
-                    result.Add(await ShipOrderItemAsync(oi.OrderItemId, shipmentData));
-                })
-            );
-            await Task.WhenAll(taskList);
+            return await CancelOrderItemsAsync(orderItemIds, cancellationReason);
+        }
 
-            return result;
+        /// <summary>
+        /// Sets shipment state for order items.
+        /// Use this method when you purchased a BOL shipping label.
+        /// </summary>
+        /// <param name="orderItemIds">The order item ids.</param>
+        /// <param name="shipmentReference">The shipment reference.</param>
+        /// <param name="labelId">The label identifier.</param>
+        /// <returns>StatusResponse.</returns>
+        public async Task<StatusResponse> ShipOrderItemsAsync(
+            IEnumerable<string> orderItemIds,
+            string shipmentReference,
+            string labelId)
+        {
+            var orderItems = orderItemIds.Select(oi => new ItemId(oi));
+            var shipmentRequest = new ShipmentRequest()
+            {
+                OrderItems = orderItems,
+                ShipmentReference = shipmentReference,
+                ShippingLabelId = labelId
+            };
+
+            return await GetApiResult<StatusResponse>(
+                HttpMethod.Put,
+                $"{EndPoints.BaseUriApiCalls}{EndPoints.Orders}/shipment",
+                shipmentRequest
+            );
+        }
+
+        /// <summary>
+        /// Sets shipment state for order items.
+        /// Use this method when you use your own transporter.
+        /// </summary>
+        /// <param name="orderItemIds">The order item ids.</param>
+        /// <param name="transporterCode">The transporter code.</param>
+        /// <param name="trackingCode">The tracking code.</param>
+        /// <returns>StatusResponse.</returns>
+        public async Task<StatusResponse> ShipOrderItemsAsync(
+            IEnumerable<string> orderItemIds,
+            TransporterCode transporterCode,
+            string trackingCode)
+        {
+            var orderItems = orderItemIds.Select(oi => new ItemId(oi));
+            var shipmentRequest = new ShipmentRequest()
+            {
+                OrderItems = orderItems,
+                Transport = new TransportInstruction()
+                {
+                    TransporterCode = transporterCode.TransporterCodeValue,
+                    TrackAndTrace = trackingCode
+                }
+            };
+
+            return await GetApiResult<StatusResponse>(
+                HttpMethod.Put,
+                $"{EndPoints.BaseUriApiCalls}{EndPoints.Orders}/shipment",
+                shipmentRequest
+            );
+        }
+
+        /// <summary>
+        /// Sets the shipment state for a complete order.
+        /// To do this, first the detailed order info is fetched.
+        /// Keep this into account with the rate limits.
+        /// Also, only use this method when you purchased a BOL shipping label.
+        /// </summary>
+        /// <param name="orderId">The order identifier.</param>
+        /// <param name="shipmentReference">The shipment reference.</param>
+        /// <param name="labelId">The label identifier.</param>
+        /// <returns>StatusResponse.</returns>
+        /// <exception cref="NoOrderItemsInOrderException">No order items found in order {orderId}.</exception>
+        public async Task<StatusResponse> ShipOrderAsync(
+            string orderId,
+            string shipmentReference,
+            string labelId)
+        {
+            var orderItemIds = await GetOrderItemIdsAsync(orderId);
+            if (orderItemIds?.Any() != true)
+                throw new NoOrderItemsInOrderException($"No order items found in order {orderId}.");
+
+            return await ShipOrderItemsAsync(
+                orderItemIds,
+                shipmentReference,
+                labelId
+            );
+        }
+
+        /// <summary>
+        /// Sets the shipment state for a complete order.
+        /// To do this, first the detailed order info is fetched.
+        /// Keep this into account with the rate limits.
+        /// Also, only use this method when you use your own transporter.
+        /// </summary>
+        /// <param name="orderId">The order identifier.</param>
+        /// <param name="transporterCode">The transporter code.</param>
+        /// <param name="trackingCode">The tracking code.</param>
+        /// <returns>StatusResponse.</returns>
+        /// <exception cref="NoOrderItemsInOrderException">No order items found in order {orderId}.</exception>
+        public async Task<StatusResponse> ShipOrderAsync(
+            string orderId,
+            TransporterCode transporterCode,
+            string trackingCode)
+        {
+            var orderItemIds = await GetOrderItemIdsAsync(orderId);
+            if (orderItemIds?.Any() != true)
+                throw new NoOrderItemsInOrderException($"No order items found in order {orderId}.");
+
+            return await ShipOrderItemsAsync(
+                orderItemIds,
+                transporterCode,
+                trackingCode
+            );
         }
     }
 }

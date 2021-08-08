@@ -1,4 +1,4 @@
-﻿using BolRetailerAPI.Models;
+﻿using BolRetailerAPI.Models.Authorization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BolRetailerAPI.Tests.Models

@@ -3,9 +3,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using BolRetailerAPI.AuthorizationToken;
 using BolRetailerAPI.Endpoints;
 using BolRetailerAPI.Models;
+using BolRetailerAPI.Models.Authorization;
+using BolRetailerAPI.Models.Status;
 
 namespace BolRetailerAPI.Client
 {
@@ -43,7 +44,7 @@ namespace BolRetailerAPI.Client
             var result = await base.GetHttpRequestMessage(httpMethod, endPoint, post);
 
             result.Headers.Accept.Clear();
-            result.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.retailer.v3+json"));
+            result.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.retailer.v5+json"));
             result.Headers.Authorization = new AuthenticationHeaderValue(
                 "Bearer",
                 await _authorizationToken.GetAuthenticationBearerAsync()
