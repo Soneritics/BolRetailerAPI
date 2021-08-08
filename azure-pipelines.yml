@@ -8,7 +8,6 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
@@ -39,4 +38,3 @@ steps:
     publishFeedCredentials: 'NuGet'
     packagesToPack: '**/BolRetailerAPI.csproj'
     versioningScheme: 'off'
-

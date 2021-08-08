@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using BolRetailerAPI.Endpoints;
 using BolRetailerAPI.Exceptions;
 using BolRetailerAPI.Models;
+using BolRetailerAPI.Models.Status;
 
 namespace BolRetailerAPI.Client
 {
@@ -64,7 +65,7 @@ namespace BolRetailerAPI.Client
                 if (post != null)
                 {
                     result.Content = new StringContent(JsonConvert.SerializeObject(post));
-                    result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.retailer.v3+json");
+                    result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.retailer.v5+json");
                 }
 
                 return result;

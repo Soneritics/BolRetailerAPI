@@ -1,46 +1,7 @@
-﻿using System.Threading.Tasks;
-using BolRetailerAPI.Models;
-using BolRetailerAPI.Services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BolRetailerAPI.Tests.AuthorizationToken
 {
-    /// <summary>
-    /// Tests for the token service.
-    /// </summary>
-    /// <seealso cref="BolRetailerAPI.Services.ITokenService" />
-    public class AuthorizationTokenTestTokenService : ITokenService
-    {
-        /// <summary>
-        /// Keep track of number of calls.
-        /// </summary>
-        public int Calls { get; set; } = 0;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AuthorizationTokenTestTokenService"/> class.
-        /// </summary>
-        public AuthorizationTokenTestTokenService()
-        {
-        }
-
-        /// <summary>
-        /// Gets a token. Always returns a token with a validity of 100 seconds.
-        /// </summary>
-        /// <param name="clientId">The client identifier.</param>
-        /// <param name="clientSecret">The client secret.</param>
-        /// <returns></returns>
-        public async Task<Token> GetTokenAsync(string clientId, string clientSecret)
-        {
-            return await Task.Run(() => new Token()
-            {
-                access_token = $"test-access-token-{Calls++}",
-                scope = "global",
-                token_type = "bearer",
-                expires_in = 10
-            });
-        }
-    }
-
     /// <summary>
     /// Tests for the authorization token class.
     /// </summary>
@@ -54,7 +15,7 @@ namespace BolRetailerAPI.Tests.AuthorizationToken
         public void Expired_Token()
         {
             var tokenService = new AuthorizationTokenTestTokenService();
-            var authorizationToken = new BolRetailerAPI.AuthorizationToken.AuthorizationToken(
+            var authorizationToken = new BolRetailerAPI.Models.Authorization.AuthorizationToken(
                 "",
                 "",
                 tokenService
@@ -72,7 +33,7 @@ namespace BolRetailerAPI.Tests.AuthorizationToken
         public void Token_Is_Valid_After_Refresh()
         {
             var tokenService = new AuthorizationTokenTestTokenService();
-            var authorizationToken = new BolRetailerAPI.AuthorizationToken.AuthorizationToken(
+            var authorizationToken = new BolRetailerAPI.Models.Authorization.AuthorizationToken(
                 "",
                 "",
                 tokenService
@@ -92,7 +53,7 @@ namespace BolRetailerAPI.Tests.AuthorizationToken
         public void Get_Bearer_Automatically_Refreshes_Token()
         {
             var tokenService = new AuthorizationTokenTestTokenService();
-            var authorizationToken = new BolRetailerAPI.AuthorizationToken.AuthorizationToken(
+            var authorizationToken = new BolRetailerAPI.Models.Authorization.AuthorizationToken(
                 "",
                 "",
                 tokenService
@@ -112,7 +73,7 @@ namespace BolRetailerAPI.Tests.AuthorizationToken
         {
             var refreshTimes = 25;
             var tokenService = new AuthorizationTokenTestTokenService();
-            var authorizationToken = new BolRetailerAPI.AuthorizationToken.AuthorizationToken(
+            var authorizationToken = new BolRetailerAPI.Models.Authorization.AuthorizationToken(
                 "",
                 "",
                 tokenService

@@ -1,17 +1,17 @@
 ﻿[![Build Status](https://soneritics.visualstudio.com/Bol%20Retailer%20API/_apis/build/status/Soneritics.BolRetailerAPI?branchName=master)](https://soneritics.visualstudio.com/Bol%20Retailer%20API/_build/latest?definitionId=2&branchName=master)
 ![License](http://img.shields.io/badge/license-MIT-green.svg)
 
-# BolRetailerAPI
+# BolRetailerAPI v5
 Bol.com Retailer API NuGet package.
 
 ## Bol.com retailer references
 Documentation for the Bol.com retailer API can be found here:
-* https://developers.bol.com/newretailerapiv3/
-* https://api.bol.com/retailer/public/redoc/v3#tag/Process-Status
+* https://api.bol.com/retailer/public/Retailer-API/getting-started.html
 
 ## NuGet package
 The API can be included in your project by installing the NuGet package:
 [BolRetailerAPI](https://www.nuget.org/packages/BolRetailerAPI/)
+(Make sure to install the correct version.)
 
 ## Example usage
 ```cs
@@ -47,18 +47,21 @@ var shipmentDetails = await api.ShipmentService.GetShipmentByIdAsync(shipmentId)
 ```
 
 ## Current implementation status
-| Service                                       | Implemented |
-|-----------------------------------------------|:-----------:|
-| Commission                                    |             |
-| Inbounds                                      |             |
-| Insights                                      |             |
-| Inventory                                     |             |
-| Invoices                                      |             |
-| Offers                                        |             |
-| Orders                                        |     1.0     |
-| Process Status                                |             |
-| Reductions                                    |             |
-| Returns                                       |             |
-| Shipments                                     |     1.2     |
-| Shipping labels                               |             |
-| Transports                                    |             |
+The following has beenm implemented:
+* Orders
+  - Get all (open) orders
+  - Get a single order's details
+  - Cancel an order (item)
+  - Ship an order (item)
+* Shipments
+  - Get shipment list
+  - Get a single shipment's details
+
+## Contributions are welcome
+If you want to add new functionality, please make a PR to be reviewed.
+
+If you want to implement new services, you might want to use the BOL.com Swagger to automatically generate the models.
+To do so, run the following command in a Linux shell (or Ubuntu bash on Windows):
+```bash
+curl -X POST https://generator3.swagger.io/api/generate -H 'content-type: application/json' -d '{"specURL" : "https://api.bol.com/retailer/public/apispec/v5","lang" : "aspnetcore","type" : "CLIENT","codegenVersion" : "V3"}' --output swaggergen.zip
+```

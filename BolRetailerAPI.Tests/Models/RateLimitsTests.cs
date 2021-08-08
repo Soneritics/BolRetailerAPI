@@ -1,5 +1,5 @@
 ﻿using System;
-using BolRetailerAPI.Models;
+using BolRetailerAPI.Models.Status;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BolRetailerAPI.Tests.Models
