@@ -38,6 +38,24 @@ var shippedOrderDetails = await bolApi.ShipmentService.GetShipmentListForOrderAs
 var shipmentDetails = await api.ShipmentService.GetShipmentByIdAsync(shipmentId);
 ```
 
+For use in an Azure function, use the following code in your Startup:
+```cs
+public override void Configure(IFunctionsHostBuilder builder)
+{
+    builder
+        .Services
+        .AddHttpClient()
+        .AddScoped<IBolRetailerApi>(sp =>
+            new BolRetailerApi(
+                Environment.GetEnvironmentVariable("ClientId"),
+                Environment.GetEnvironmentVariable("ClientSecret"),
+                sp.GetRequiredService<HttpClient>(),
+                Environment.GetEnvironmentVariable("TestMode") == "1"
+            )
+        );
+}
+```
+
 ## Current implementation status
 The following has been implemented:
 * Orders
