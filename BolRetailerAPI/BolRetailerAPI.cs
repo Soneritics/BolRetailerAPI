@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using BolRetailerAPI.Endpoints;
 using BolRetailerAPI.EndPoints;
-using BolRetailerAPI.Models;
 using BolRetailerAPI.Models.Authorization;
 using BolRetailerAPI.Models.Status;
 using BolRetailerAPI.Services;
@@ -12,7 +11,7 @@ namespace BolRetailerAPI
     /// <summary>
     /// Wrapper class for the Bol Retailer API services.
     /// </summary>
-    public class BolRetailerApi
+    public class BolRetailerApi : IBolRetailerApi
     {
         public RateLimits RateLimits { get; }
         protected readonly IEndPoints EndPoints;

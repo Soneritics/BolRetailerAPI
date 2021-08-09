@@ -39,7 +39,7 @@ var shipmentDetails = await api.ShipmentService.GetShipmentByIdAsync(shipmentId)
 ```
 
 ## Current implementation status
-The following has beenm implemented:
+The following has been implemented:
 * Orders
   - Get all (open) orders
   - Get a single order's details
