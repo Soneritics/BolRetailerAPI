@@ -3,11 +3,11 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using BolRetailerAPI.Endpoints;
 using BolRetailerAPI.Exceptions;
-using BolRetailerAPI.Models;
 using BolRetailerAPI.Models.Status;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace BolRetailerAPI.Client
 {
@@ -20,6 +20,14 @@ namespace BolRetailerAPI.Client
         public HttpStatusCode LastRequestStatus { get; protected set; }
         protected readonly HttpClient HttpClient;
         protected readonly IEndPoints EndPoints;
+        private readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                }
+            };
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientBase"/> class.
@@ -64,7 +72,7 @@ namespace BolRetailerAPI.Client
 
                 if (post != null)
                 {
-                    result.Content = new StringContent(JsonConvert.SerializeObject(post));
+                    result.Content = new StringContent(JsonConvert.SerializeObject(post, _serializerSettings));
                     result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.retailer.v5+json");
                 }
 
@@ -129,7 +137,7 @@ namespace BolRetailerAPI.Client
             }
 
             // This should not happen
-            return new Exception($"HttpRequestException occured with message '{LastError.error_description}'");
+            return new Exception($"HttpRequestException occurred with message '{LastError.error_description}'");
         }
 
         /// <summary>

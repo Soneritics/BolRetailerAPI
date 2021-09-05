@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using BolRetailerAPI.Endpoints;
-using BolRetailerAPI.Models;
 using BolRetailerAPI.Models.Authorization;
 using BolRetailerAPI.Models.Status;
 
@@ -26,7 +25,12 @@ namespace BolRetailerAPI.Client
         /// <param name="endPoints">The end points.</param>
         /// <param name="authorizationToken">The authorization token.</param>
         /// <param name="rateLimits">The rate limits.</param>
-        protected AuthenticatedClientBase(HttpClient httpClient, IEndPoints endPoints, IAuthorizationToken authorizationToken, RateLimits rateLimits = null) : base(httpClient, endPoints)
+        protected AuthenticatedClientBase(
+            HttpClient httpClient,
+            IEndPoints endPoints,
+            IAuthorizationToken authorizationToken,
+            RateLimits rateLimits = null)
+            : base(httpClient, endPoints)
         {
             _authorizationToken = authorizationToken;
             RateLimits = rateLimits ?? new RateLimits();
@@ -39,7 +43,10 @@ namespace BolRetailerAPI.Client
         /// <param name="endPoint">The end point.</param>
         /// <param name="post">The post.</param>
         /// <returns></returns>
-        protected override async Task<HttpRequestMessage> GetHttpRequestMessage(HttpMethod httpMethod, string endPoint, object post = null)
+        protected override async Task<HttpRequestMessage> GetHttpRequestMessage(
+            HttpMethod httpMethod,
+            string endPoint,
+            object post = null)
         {
             var result = await base.GetHttpRequestMessage(httpMethod, endPoint, post);
 
