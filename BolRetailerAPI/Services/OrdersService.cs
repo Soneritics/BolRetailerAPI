@@ -107,10 +107,15 @@ namespace BolRetailerAPI.Services
                     ReasonCode = cancellationReason.ReasonValue
                 });
 
+            var cancellationRequest = new CancellationRequest()
+            {
+                OrderItems = cancellationList
+            };
+
             return await GetApiResult<StatusResponse>(
                 HttpMethod.Put,
                 $"{EndPoints.BaseUriApiCalls}{EndPoints.Orders}/cancellation",
-                cancellationList
+                cancellationRequest
             );
         }
 
