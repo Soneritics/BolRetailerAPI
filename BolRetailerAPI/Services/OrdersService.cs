@@ -95,28 +95,18 @@ namespace BolRetailerAPI.Services
         /// <param name="orderItemIds">The order item ids.</param>
         /// <param name="cancellationReason">The cancellation reason.</param>
         /// <returns>StatusResponse.</returns>
-        public async Task<StatusResponse> CancelOrderItemsAsync(
+        public async Task<IEnumerable<StatusResponse>> CancelOrderItemsAsync(
             IEnumerable<string> orderItemIds,
             CancellationReason cancellationReason = null)
         {
-            cancellationReason ??= new CancellationReason();
-            var cancellationList = orderItemIds
-                .Select(oi => new OrderItemCancellation()
-                {
-                    OrderItemId = oi,
-                    ReasonCode = cancellationReason.ReasonValue
-                });
+            var result = new List<StatusResponse>();
 
-            var cancellationRequest = new CancellationRequest()
+            foreach (var orderItemId in orderItemIds)
             {
-                OrderItems = cancellationList
-            };
+                result.Add(await CancelOrderItemAsync(orderItemId, cancellationReason));
+            }
 
-            return await GetApiResult<StatusResponse>(
-                HttpMethod.Put,
-                $"{EndPoints.BaseUriApiCalls}{EndPoints.Orders}/cancellation",
-                cancellationRequest
-            );
+            return result;
         }
 
         /// <summary>
@@ -129,9 +119,23 @@ namespace BolRetailerAPI.Services
             string orderItemId,
             CancellationReason cancellationReason = null)
         {
-            return await CancelOrderItemsAsync(
-                new [] { orderItemId },
-                cancellationReason
+            cancellationReason ??= new CancellationReason();
+            var cancellationRequest = new CancellationRequest()
+            {
+                OrderItems = new[]
+                {
+                    new OrderItemCancellation()
+                    {
+                        OrderItemId = orderItemId,
+                        ReasonCode = cancellationReason.ReasonValue
+                    }
+                }
+            };
+
+            return await GetApiResult<StatusResponse>(
+                HttpMethod.Put,
+                $"{EndPoints.BaseUriApiCalls}{EndPoints.Orders}/cancellation",
+                cancellationRequest
             );
         }
 
@@ -144,7 +148,7 @@ namespace BolRetailerAPI.Services
         /// <param name="cancellationReason">The cancellation reason.</param>
         /// <returns>StatusResponse.</returns>
         /// <exception cref="NoOrderItemsInOrderException">No order items found in order {orderId}.</exception>
-        public async Task<StatusResponse> CancelOrderAsync(
+        public async Task<IEnumerable<StatusResponse>> CancelOrderAsync(
             string orderId,
             CancellationReason cancellationReason = null)
         {
@@ -163,24 +167,33 @@ namespace BolRetailerAPI.Services
         /// <param name="shipmentReference">The shipment reference.</param>
         /// <param name="labelId">The label identifier.</param>
         /// <returns>StatusResponse.</returns>
-        public async Task<StatusResponse> ShipOrderItemsAsync(
+        public async Task<IEnumerable<StatusResponse>> ShipOrderItemsAsync(
             IEnumerable<string> orderItemIds,
             string shipmentReference,
             string labelId)
         {
+            var result = new List<StatusResponse>();
             var orderItems = orderItemIds.Select(oi => new ItemId(oi));
-            var shipmentRequest = new ShipmentRequest()
-            {
-                OrderItems = orderItems,
-                ShipmentReference = shipmentReference,
-                ShippingLabelId = labelId
-            };
 
-            return await GetApiResult<StatusResponse>(
-                HttpMethod.Put,
-                $"{EndPoints.BaseUriApiCalls}{EndPoints.Orders}/shipment",
-                shipmentRequest
-            );
+            foreach (var orderItem in orderItems)
+            {
+                var shipmentRequest = new ShipmentRequest()
+                {
+                    OrderItems = new [] { orderItem },
+                    ShipmentReference = shipmentReference,
+                    ShippingLabelId = labelId
+                };
+
+                result.Add(
+                    await GetApiResult<StatusResponse>(
+                        HttpMethod.Put,
+                        $"{EndPoints.BaseUriApiCalls}{EndPoints.Orders}/shipment",
+                        shipmentRequest
+                    )
+                );
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -191,27 +204,36 @@ namespace BolRetailerAPI.Services
         /// <param name="transporterCode">The transporter code.</param>
         /// <param name="trackingCode">The tracking code.</param>
         /// <returns>StatusResponse.</returns>
-        public async Task<StatusResponse> ShipOrderItemsAsync(
+        public async Task<IEnumerable<StatusResponse>> ShipOrderItemsAsync(
             IEnumerable<string> orderItemIds,
             TransporterCode transporterCode,
             string trackingCode)
         {
+            var result = new List<StatusResponse>();
             var orderItems = orderItemIds.Select(oi => new ItemId(oi));
-            var shipmentRequest = new ShipmentRequest()
-            {
-                OrderItems = orderItems,
-                Transport = new TransportInstruction()
-                {
-                    TransporterCode = transporterCode.TransporterCodeValue,
-                    TrackAndTrace = trackingCode
-                }
-            };
 
-            return await GetApiResult<StatusResponse>(
-                HttpMethod.Put,
-                $"{EndPoints.BaseUriApiCalls}{EndPoints.Orders}/shipment",
-                shipmentRequest
-            );
+            foreach (var orderItem in orderItems)
+            {
+                var shipmentRequest = new ShipmentRequest()
+                {
+                    OrderItems = new[] { orderItem },
+                    Transport = new TransportInstruction()
+                    {
+                        TransporterCode = transporterCode.TransporterCodeValue,
+                        TrackAndTrace = trackingCode
+                    }
+                };
+
+                result.Add(
+                    await GetApiResult<StatusResponse>(
+                        HttpMethod.Put,
+                        $"{EndPoints.BaseUriApiCalls}{EndPoints.Orders}/shipment",
+                        shipmentRequest
+                    )
+                );
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -225,7 +247,7 @@ namespace BolRetailerAPI.Services
         /// <param name="labelId">The label identifier.</param>
         /// <returns>StatusResponse.</returns>
         /// <exception cref="NoOrderItemsInOrderException">No order items found in order {orderId}.</exception>
-        public async Task<StatusResponse> ShipOrderAsync(
+        public async Task<IEnumerable<StatusResponse>> ShipOrderAsync(
             string orderId,
             string shipmentReference,
             string labelId)
@@ -252,7 +274,7 @@ namespace BolRetailerAPI.Services
         /// <param name="trackingCode">The tracking code.</param>
         /// <returns>StatusResponse.</returns>
         /// <exception cref="NoOrderItemsInOrderException">No order items found in order {orderId}.</exception>
-        public async Task<StatusResponse> ShipOrderAsync(
+        public async Task<IEnumerable<StatusResponse>> ShipOrderAsync(
             string orderId,
             TransporterCode transporterCode,
             string trackingCode)
