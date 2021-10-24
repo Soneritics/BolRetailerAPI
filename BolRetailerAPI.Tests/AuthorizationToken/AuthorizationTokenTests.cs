@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BolRetailerAPI.Tests.AuthorizationToken
+namespace Tests.AuthorizationToken
 {
     /// <summary>
     /// Tests for the authorization token class.
@@ -15,7 +15,7 @@ namespace BolRetailerAPI.Tests.AuthorizationToken
         public void Expired_Token()
         {
             var tokenService = new AuthorizationTokenTestTokenService();
-            var authorizationToken = new BolRetailerAPI.Models.Authorization.AuthorizationToken(
+            var authorizationToken = new BolRetailerApi.Models.Authorization.AuthorizationToken(
                 "",
                 "",
                 tokenService
@@ -33,7 +33,7 @@ namespace BolRetailerAPI.Tests.AuthorizationToken
         public void Token_Is_Valid_After_Refresh()
         {
             var tokenService = new AuthorizationTokenTestTokenService();
-            var authorizationToken = new BolRetailerAPI.Models.Authorization.AuthorizationToken(
+            var authorizationToken = new BolRetailerApi.Models.Authorization.AuthorizationToken(
                 "",
                 "",
                 tokenService
@@ -53,7 +53,7 @@ namespace BolRetailerAPI.Tests.AuthorizationToken
         public void Get_Bearer_Automatically_Refreshes_Token()
         {
             var tokenService = new AuthorizationTokenTestTokenService();
-            var authorizationToken = new BolRetailerAPI.Models.Authorization.AuthorizationToken(
+            var authorizationToken = new BolRetailerApi.Models.Authorization.AuthorizationToken(
                 "",
                 "",
                 tokenService
@@ -73,7 +73,7 @@ namespace BolRetailerAPI.Tests.AuthorizationToken
         {
             var refreshTimes = 25;
             var tokenService = new AuthorizationTokenTestTokenService();
-            var authorizationToken = new BolRetailerAPI.Models.Authorization.AuthorizationToken(
+            var authorizationToken = new BolRetailerApi.Models.Authorization.AuthorizationToken(
                 "",
                 "",
                 tokenService

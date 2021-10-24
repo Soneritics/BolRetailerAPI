@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BolRetailerAPI.Models.Status
+namespace BolRetailerApi.Models.Status
 {
     public class StatusResponse
     {

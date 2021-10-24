@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -14,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BolRetailerAPI\BolRetailerAPI.csproj" />
+    <ProjectReference Include="..\BolRetailerAPI\BolRetailerApi.csproj" />
   </ItemGroup>
 
 </Project>

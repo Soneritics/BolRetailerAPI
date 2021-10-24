@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BolRetailerAPI.Models.Authorization
+namespace BolRetailerApi.Models.Authorization
 {
     public class Token
     {

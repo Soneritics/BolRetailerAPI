@@ -1,7 +1,7 @@
-﻿using BolRetailerAPI.Models.Authorization;
+﻿using BolRetailerApi.Models.Authorization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BolRetailerAPI.Tests.Models
+namespace Tests.Models
 {
     [TestClass]
     public class TokenTests

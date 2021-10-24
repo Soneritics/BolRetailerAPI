@@ -1,8 +1,8 @@
 ﻿using System;
-using BolRetailerAPI.Models.Status;
+using BolRetailerApi.Models.Status;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BolRetailerAPI.Tests.Models
+namespace Tests.Models
 {
     /// <summary>
     /// Tests for the RateLimits model.
@@ -16,9 +16,11 @@ namespace BolRetailerAPI.Tests.Models
         [TestMethod]
         public void Is_Valid()
         {
-            var rateLimits = new RateLimits();
+            var rateLimits = new RateLimits
+            {
+                ResetsAt = DateTime.Now.AddSeconds(10)
+            };
 
-            rateLimits.ResetsAt = DateTime.Now.AddSeconds(10);
             var isValid = rateLimits.IsStillValid();
 
             Assert.IsTrue(isValid);
@@ -30,9 +32,11 @@ namespace BolRetailerAPI.Tests.Models
         [TestMethod]
         public void Is_Invalid()
         {
-            var rateLimits = new RateLimits();
+            var rateLimits = new RateLimits
+            {
+                ResetsAt = DateTime.Now
+            };
 
-            rateLimits.ResetsAt = DateTime.Now;
             var isValid = rateLimits.IsStillValid();
 
             Assert.IsFalse(isValid);

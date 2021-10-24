@@ -1,7 +1,7 @@
-﻿using BolRetailerAPI.EndPoints;
+﻿using BolRetailerApi.Endpoints;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BolRetailerAPI.Tests.Endpoints
+namespace Tests.Endpoints
 {
     /// <summary>
     /// Tests for the TestEndPoints class

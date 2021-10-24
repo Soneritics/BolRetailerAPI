@@ -1,4 +1,4 @@
-﻿namespace BolRetailerAPI.Models.Enum
+﻿namespace BolRetailerApi.Models.Enum
 {
     public enum DistributionParty
     {

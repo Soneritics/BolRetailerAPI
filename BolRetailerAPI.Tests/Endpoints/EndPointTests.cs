@@ -1,6 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using BolRetailerApi.Endpoints;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BolRetailerAPI.Tests.Endpoints
+namespace Tests.Endpoints
 {
     /// <summary>
     /// Tests for the EndPoints class
@@ -14,7 +15,7 @@ namespace BolRetailerAPI.Tests.Endpoints
         [TestMethod]
         public void Ensure_Test_Endpoint_Usage()
         {
-            var endpoints = new EndPoints.EndPoints();
+            var endpoints = new EndPoints();
             Assert.AreEqual(
                 "https://api.bol.com/retailer/",
                 endpoints.BaseUriApiCalls

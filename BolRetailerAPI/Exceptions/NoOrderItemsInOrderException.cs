@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BolRetailerAPI.Exceptions
+namespace BolRetailerApi.Exceptions
 {
     /// <summary>
     /// Exception that indicates that an order has no order items.

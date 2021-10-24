@@ -1,11 +1,9 @@
-﻿using BolRetailerAPI.Endpoints;
-
-namespace BolRetailerAPI.EndPoints
+﻿namespace BolRetailerApi.Endpoints
 {
     /// <summary>
     /// Live endpoints.
     /// </summary>
-    /// <seealso cref="BolRetailerAPI.Endpoints.IEndPoints" />
+    /// <seealso cref="IEndPoints" />
     public class EndPoints : IEndPoints
     {
         public virtual string BaseUriLogin { get; } = "https://login.bol.com/";

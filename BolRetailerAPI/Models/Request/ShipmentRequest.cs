@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BolRetailerAPI.Models.Request
+namespace BolRetailerApi.Models.Request
 {
     internal class ShipmentRequest
     {

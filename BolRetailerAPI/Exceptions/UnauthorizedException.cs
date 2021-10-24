@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BolRetailerAPI.Exceptions
+namespace BolRetailerApi.Exceptions
 {
     /// <summary>
     /// Token is invalid, so the Bol API returns a Unauthorized status code.

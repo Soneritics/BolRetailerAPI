@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using BolRetailerAPI.Models.Response.Orders;
+using BolRetailerApi.Models.Response.Orders;
 
-namespace BolRetailerAPI.Models.Response.Shipments
+namespace BolRetailerApi.Models.Response.Shipments
 {
     public class Shipment
     {
-        public long ShipmentId { get; set; }
+        public string ShipmentId { get; set; }
         public DateTime ShipmentDateTime { get; set; }
         public string ShipmentReference { get; set; }
         public bool PickupPoint { get; set; }

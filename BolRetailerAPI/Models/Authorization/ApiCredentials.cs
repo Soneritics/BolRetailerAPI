@@ -1,4 +1,4 @@
-﻿namespace BolRetailerAPI.Models.Authorization
+﻿namespace BolRetailerApi.Models.Authorization
 {
     /// <summary>
     /// API credentials DTO, only used within this package.

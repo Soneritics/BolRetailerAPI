@@ -3,11 +3,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using BolRetailerAPI.Client;
-using BolRetailerAPI.Endpoints;
-using BolRetailerAPI.Models.Authorization;
+using BolRetailerApi.Client;
+using BolRetailerApi.Endpoints;
+using BolRetailerApi.Models.Authorization;
 
-namespace BolRetailerAPI.Services.Authorization
+namespace BolRetailerApi.Services.Authorization
 {
     /// <summary>
     /// TokenService to get tokens from the Bol API.

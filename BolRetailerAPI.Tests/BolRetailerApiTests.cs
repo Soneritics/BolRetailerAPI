@@ -1,7 +1,7 @@
-using BolRetailerAPI.EndPoints;
+using BolRetailerApi.Endpoints;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BolRetailerAPI.Tests
+namespace Tests
 {
     /// <summary>
     /// Tests for the BolRetailerApi class.
@@ -26,7 +26,7 @@ namespace BolRetailerAPI.Tests
         public void Init_Uses_Live_Endpoint_Explicit()
         {
             var api = new BolRetailerApiTestClass("", "", false);
-            Assert.IsInstanceOfType(api.GetEndPoints, typeof(EndPoints.EndPoints));
+            Assert.IsInstanceOfType(api.GetEndPoints, typeof(EndPoints));
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace BolRetailerAPI.Tests
         public void Init_Uses_Live_Endpoint_Implicit()
         {
             var api = new BolRetailerApiTestClass("", "");
-            Assert.IsInstanceOfType(api.GetEndPoints, typeof(EndPoints.EndPoints));
+            Assert.IsInstanceOfType(api.GetEndPoints, typeof(EndPoints));
         }
     }
 }

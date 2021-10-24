@@ -1,4 +1,4 @@
-﻿namespace BolRetailerAPI.Models.Status
+﻿namespace BolRetailerApi.Models.Status
 {
     public class Link
     {

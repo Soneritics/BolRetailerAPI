@@ -2,17 +2,17 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using BolRetailerAPI.Client;
-using BolRetailerAPI.Endpoints;
-using BolRetailerAPI.Exceptions;
-using BolRetailerAPI.Models.Authorization;
-using BolRetailerAPI.Models.Enum;
-using BolRetailerAPI.Models.Request;
-using BolRetailerAPI.Models.Response;
-using BolRetailerAPI.Models.Response.Orders;
-using BolRetailerAPI.Models.Status;
+using BolRetailerApi.Client;
+using BolRetailerApi.Endpoints;
+using BolRetailerApi.Exceptions;
+using BolRetailerApi.Models.Authorization;
+using BolRetailerApi.Models.Enum;
+using BolRetailerApi.Models.Request;
+using BolRetailerApi.Models.Response;
+using BolRetailerApi.Models.Response.Orders;
+using BolRetailerApi.Models.Status;
 
-namespace BolRetailerAPI.Services
+namespace BolRetailerApi.Services
 {
     /// <summary>
     /// Orders API Service

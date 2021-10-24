@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace BolRetailerAPI.Models.Authorization
+namespace BolRetailerApi.Models.Authorization
 {
     /// <summary>
     /// Authorization token interface.

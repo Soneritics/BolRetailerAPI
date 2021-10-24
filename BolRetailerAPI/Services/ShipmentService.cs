@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using BolRetailerAPI.Client;
-using BolRetailerAPI.Endpoints;
-using BolRetailerAPI.Models.Authorization;
-using BolRetailerAPI.Models.Enum;
-using BolRetailerAPI.Models.Response;
-using BolRetailerAPI.Models.Response.Shipments;
-using BolRetailerAPI.Models.Status;
+using BolRetailerApi.Client;
+using BolRetailerApi.Endpoints;
+using BolRetailerApi.Models.Authorization;
+using BolRetailerApi.Models.Enum;
+using BolRetailerApi.Models.Response;
+using BolRetailerApi.Models.Response.Shipments;
+using BolRetailerApi.Models.Status;
 
-namespace BolRetailerAPI.Services
+namespace BolRetailerApi.Services
 {
     /// <summary>
     /// Shipment service
@@ -75,7 +75,7 @@ namespace BolRetailerAPI.Services
         /// </summary>
         /// <param name="shipmentId">The shipment identifier.</param>
         /// <returns>Shipment.</returns>
-        public async Task<Shipment> GetShipmentByIdAsync(int shipmentId)
+        public async Task<Shipment> GetShipmentByIdAsync(string shipmentId)
         {
             return await GetApiResult<Shipment>(
                 HttpMethod.Get,

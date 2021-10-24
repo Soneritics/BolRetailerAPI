@@ -1,12 +1,12 @@
-using BolRetailerAPI.Endpoints;
+using BolRetailerApi.Endpoints;
 
-namespace BolRetailerAPI.Tests
+namespace Tests
 {
     /// <summary>
     /// Test class helper for the BolRetailerApi class.
     /// </summary>
-    /// <seealso cref="BolRetailerAPI.BolRetailerApi" />
-    public class BolRetailerApiTestClass : BolRetailerApi
+    /// <seealso cref="BolRetailerApi" />
+    public class BolRetailerApiTestClass : BolRetailerApi.BolRetailerApi
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BolRetailerApiTestClass"/> class.

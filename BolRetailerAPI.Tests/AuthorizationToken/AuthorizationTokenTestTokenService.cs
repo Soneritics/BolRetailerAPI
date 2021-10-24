@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
-using BolRetailerAPI.Models.Authorization;
-using BolRetailerAPI.Services;
-using BolRetailerAPI.Services.Authorization;
+using BolRetailerApi.Models.Authorization;
+using BolRetailerApi.Services.Authorization;
 
-namespace BolRetailerAPI.Tests.AuthorizationToken
+namespace Tests.AuthorizationToken
 {
     /// <summary>
     /// Tests for the token service.

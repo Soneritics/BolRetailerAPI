@@ -1,4 +1,4 @@
-﻿namespace BolRetailerAPI.Models.Response.Shipments
+﻿namespace BolRetailerApi.Models.Response.Shipments
 {
     public class ReducedShipmentItem
     {

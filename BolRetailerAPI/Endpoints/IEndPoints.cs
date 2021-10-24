@@ -1,4 +1,4 @@
-﻿namespace BolRetailerAPI.Endpoints
+﻿namespace BolRetailerApi.Endpoints
 {
     /// <summary>
     /// Endpoint definitions.

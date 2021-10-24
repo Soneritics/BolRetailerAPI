@@ -3,16 +3,16 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using BolRetailerAPI.Endpoints;
-using BolRetailerAPI.Models.Authorization;
-using BolRetailerAPI.Models.Status;
+using BolRetailerApi.Endpoints;
+using BolRetailerApi.Models.Authorization;
+using BolRetailerApi.Models.Status;
 
-namespace BolRetailerAPI.Client
+namespace BolRetailerApi.Client
 {
     /// <summary>
     /// Client base class for authenticated requests.
     /// </summary>
-    /// <seealso cref="BolRetailerAPI.Client.ClientBase" />
+    /// <seealso cref="ClientBase" />
     public abstract class AuthenticatedClientBase : ClientBase
     {
         public RateLimits RateLimits { get; private set; }
@@ -51,7 +51,7 @@ namespace BolRetailerAPI.Client
             var result = await base.GetHttpRequestMessage(httpMethod, endPoint, post);
 
             result.Headers.Accept.Clear();
-            result.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.retailer.v5+json"));
+            result.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.retailer.v6+json"));
             result.Headers.Authorization = new AuthenticationHeaderValue(
                 "Bearer",
                 await _authorizationToken.GetAuthenticationBearerAsync()

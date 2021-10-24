@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BolRetailerAPI.Models.Response.Orders
+namespace BolRetailerApi.Models.Response.Orders
 {
     public class OrderItem
     {

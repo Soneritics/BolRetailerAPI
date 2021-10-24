@@ -3,13 +3,13 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using BolRetailerAPI.Endpoints;
-using BolRetailerAPI.Exceptions;
-using BolRetailerAPI.Models.Status;
+using BolRetailerApi.Endpoints;
+using BolRetailerApi.Exceptions;
+using BolRetailerApi.Models.Status;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace BolRetailerAPI.Client
+namespace BolRetailerApi.Client
 {
     /// <summary>
     /// Base client. Uses no authentication, only calls Http endpoints and processes the results.
@@ -73,7 +73,7 @@ namespace BolRetailerAPI.Client
                 if (post != null)
                 {
                     result.Content = new StringContent(JsonConvert.SerializeObject(post, _serializerSettings));
-                    result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.retailer.v5+json");
+                    result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.retailer.v6+json");
                 }
 
                 return result;

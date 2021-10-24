@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BolRetailerAPI.Exceptions
+namespace BolRetailerApi.Exceptions
 {
     /// <summary>
     /// Request is throttled, so the Bol API returns a TooManyRequests status code.

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BolRetailerAPI.Models.Response.Shipments
+namespace BolRetailerApi.Models.Response.Shipments
 {
     public class ReducedShipment
     {
-        public long? ShipmentId { get; set; }
+        public string ShipmentId { get; set; }
         public DateTime? ShipmentDateTime { get; set; }
         public string ShipmentReference { get; set; }
         public ReducedShipmentOrder Order { get; set; }

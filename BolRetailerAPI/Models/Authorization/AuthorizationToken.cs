@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using BolRetailerAPI.Services;
-using BolRetailerAPI.Services.Authorization;
+using BolRetailerApi.Services.Authorization;
 
-namespace BolRetailerAPI.Models.Authorization
+namespace BolRetailerApi.Models.Authorization
 {
     /// <summary>
     /// Authorization token implementation.

@@ -1,7 +1,7 @@
-﻿using BolRetailerAPI.Services;
-using BolRetailerAPI.Services.Authorization;
+﻿using BolRetailerApi.Services;
+using BolRetailerApi.Services.Authorization;
 
-namespace BolRetailerAPI
+namespace BolRetailerApi
 {
     /// <summary>
     /// Wrapper class interface for the Bol Retailer API services.

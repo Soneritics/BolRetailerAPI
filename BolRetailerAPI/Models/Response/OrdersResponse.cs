@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using BolRetailerAPI.Models.Response.Orders;
+using BolRetailerApi.Models.Response.Orders;
 
-namespace BolRetailerAPI.Models.Response
+namespace BolRetailerApi.Models.Response
 {
     internal class OrdersResponse
     {

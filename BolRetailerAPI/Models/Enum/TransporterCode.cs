@@ -1,4 +1,4 @@
-﻿namespace BolRetailerAPI.Models.Enum
+﻿namespace BolRetailerApi.Models.Enum
 {
     /// <summary>
     /// List of all the transporter codes

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BolRetailerAPI.Models.Status
+namespace BolRetailerApi.Models.Status
 {
     /// <summary>
     /// Keeps track of the rate limits.

@@ -1,6 +1,6 @@
-﻿using BolRetailerAPI.Models.Response.Orders;
+﻿using BolRetailerApi.Models.Response.Orders;
 
-namespace BolRetailerAPI.Models.Response.Shipments
+namespace BolRetailerApi.Models.Response.Shipments
 {
     public class ShipmentItem
     {

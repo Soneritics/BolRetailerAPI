@@ -1,12 +1,11 @@
 ﻿using System.Net.Http;
-using BolRetailerAPI.Endpoints;
-using BolRetailerAPI.EndPoints;
-using BolRetailerAPI.Models.Authorization;
-using BolRetailerAPI.Models.Status;
-using BolRetailerAPI.Services;
-using BolRetailerAPI.Services.Authorization;
+using BolRetailerApi.Endpoints;
+using BolRetailerApi.Models.Authorization;
+using BolRetailerApi.Models.Status;
+using BolRetailerApi.Services;
+using BolRetailerApi.Services.Authorization;
 
-namespace BolRetailerAPI
+namespace BolRetailerApi
 {
     /// <summary>
     /// Wrapper class for the Bol Retailer API services.
@@ -29,7 +28,7 @@ namespace BolRetailerAPI
         public BolRetailerApi(string clientId, string clientSecret, HttpClient httpClient, bool testMode = false)
         {
             RateLimits = new RateLimits();
-            EndPoints = testMode ? new TestEndPoints() : new EndPoints.EndPoints();
+            EndPoints = testMode ? new TestEndPoints() : new EndPoints();
             _httpClient = httpClient;
             _authorizationToken = new AuthorizationToken(clientId, clientSecret, TokenService);
         }

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using BolRetailerAPI.Models.Authorization;
+using BolRetailerApi.Models.Authorization;
 
-namespace BolRetailerAPI.Services.Authorization
+namespace BolRetailerApi.Services.Authorization
 {
     /// <summary>
     /// TokenService interface.

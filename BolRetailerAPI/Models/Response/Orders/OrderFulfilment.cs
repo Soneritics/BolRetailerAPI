@@ -1,7 +1,7 @@
 ﻿using System;
-using BolRetailerAPI.Models.Enum;
+using BolRetailerApi.Models.Enum;
 
-namespace BolRetailerAPI.Models.Response.Orders
+namespace BolRetailerApi.Models.Response.Orders
 {
     public class OrderFulfilment
     {
