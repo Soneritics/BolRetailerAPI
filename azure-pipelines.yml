@@ -27,7 +27,7 @@ steps:
   inputs:
     command: 'pack'
     arguments: '--configuration $(buildConfiguration)'
-    projects: '**/BolRetailerAPI.csproj'
+    packagesToPack: '**/BolRetailerAPI.csproj'
 
 - task: NuGetCommand@2
   displayName: Push
