@@ -29,7 +29,7 @@ try
     Console.WriteLine($"Found {orders.Count()} open orders.\n");
 
     var firstOrder = orders.First();
-    Console.WriteLine("First order has order id {firstOrder.OrderId}\n");
+    Console.WriteLine($"First order has order id {firstOrder.OrderId}\n");
 
     Console.WriteLine("Fetching the full order..");
     var fullOrder = await api.OrdersService.GetOrderAsync(firstOrder.OrderId);

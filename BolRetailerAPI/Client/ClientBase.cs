@@ -73,7 +73,7 @@ namespace BolRetailerApi.Client
                 if (post != null)
                 {
                     result.Content = new StringContent(JsonConvert.SerializeObject(post, _serializerSettings));
-                    result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.retailer.v6+json");
+                    result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.retailer.v7+json");
                 }
 
                 return result;
