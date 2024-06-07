@@ -2,44 +2,43 @@
 using BolRetailerApi.Models.Status;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tests.Models
+namespace Tests.Models;
+
+/// <summary>
+///     Tests for the RateLimits model.
+/// </summary>
+[TestClass]
+public class RateLimitsTests
 {
     /// <summary>
-    /// Tests for the RateLimits model.
+    ///     Test if the rate limits are still valid and should not be refreshed.
     /// </summary>
-    [TestClass]
-    public class RateLimitsTests
+    [TestMethod]
+    public void Is_Valid()
     {
-        /// <summary>
-        /// Test if the rate limits are still valid and should not be refreshed.
-        /// </summary>
-        [TestMethod]
-        public void Is_Valid()
+        var rateLimits = new RateLimits
         {
-            var rateLimits = new RateLimits
-            {
-                ResetsAt = DateTime.Now.AddSeconds(10)
-            };
+            ResetsAt = DateTime.Now.AddSeconds(10)
+        };
 
-            var isValid = rateLimits.IsStillValid();
+        var isValid = rateLimits.IsStillValid();
 
-            Assert.IsTrue(isValid);
-        }
+        Assert.IsTrue(isValid);
+    }
 
-        /// <summary>
-        /// Test if RateLimits are not valid anymore because they have refreshed.
-        /// </summary>
-        [TestMethod]
-        public void Is_Invalid()
+    /// <summary>
+    ///     Test if RateLimits are not valid anymore because they have refreshed.
+    /// </summary>
+    [TestMethod]
+    public void Is_Invalid()
+    {
+        var rateLimits = new RateLimits
         {
-            var rateLimits = new RateLimits
-            {
-                ResetsAt = DateTime.Now
-            };
+            ResetsAt = DateTime.Now
+        };
 
-            var isValid = rateLimits.IsStillValid();
+        var isValid = rateLimits.IsStillValid();
 
-            Assert.IsFalse(isValid);
-        }
+        Assert.IsFalse(isValid);
     }
 }

@@ -1,8 +1,7 @@
-﻿namespace BolRetailerApi.Models.Request
+﻿namespace BolRetailerApi.Models.Request;
+
+internal class OrderItemCancellation
 {
-    internal class OrderItemCancellation
-    {
-        public string OrderItemId { get; set; }
-        public string ReasonCode { get; set; }
-    }
+    public string OrderItemId { get; set; }
+    public string ReasonCode { get; set; }
 }

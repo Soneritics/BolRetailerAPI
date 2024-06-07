@@ -1,10 +1,10 @@
 ﻿using System;
+using BolRetailerApi.Models.Enum;
 
-namespace BolRetailerApi.Models.Response.Shipments
+namespace BolRetailerApi.Models.Response.Shipments;
+
+public class TransportEvent
 {
-    public class TransportEvent
-    {
-        public string EventCode { get; set; }
-        public DateTime EventDateTime { get; set; }
-    }
+    public TransporterEventCode EventCode { get; set; }
+    public DateTime EventDateTime { get; set; }
 }

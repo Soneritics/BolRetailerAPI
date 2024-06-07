@@ -1,8 +1,8 @@
-﻿namespace BolRetailerApi.Models.Enum
+﻿namespace BolRetailerApi.Models.Enum;
+
+public enum Method
 {
-    public enum Method
-    {
-        FBR = 0,
-        FBB = 1
-    }
+    FBR = 0,
+    FBB = 1,
+    ALL = 2
 }

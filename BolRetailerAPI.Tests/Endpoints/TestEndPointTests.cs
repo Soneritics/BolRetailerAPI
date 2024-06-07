@@ -1,25 +1,24 @@
 ﻿using BolRetailerApi.Endpoints;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tests.Endpoints
+namespace Tests.Endpoints;
+
+/// <summary>
+///     Tests for the TestEndPoints class
+/// </summary>
+[TestClass]
+public class TestEndPointTests
 {
     /// <summary>
-    /// Tests for the TestEndPoints class
+    ///     Ensures the test endpoint usage.
     /// </summary>
-    [TestClass]
-    public class TestEndPointTests
+    [TestMethod]
+    public void Ensure_Test_Endpoint_Usage()
     {
-        /// <summary>
-        /// Ensures the test endpoint usage.
-        /// </summary>
-        [TestMethod]
-        public void Ensure_Test_Endpoint_Usage()
-        {
-            var endpoints = new TestEndPoints();
-            Assert.AreEqual(
-                "https://api.bol.com/retailer-demo/",
-                endpoints.BaseUriApiCalls
-            );
-        }
+        var endpoints = new TestEndPoints();
+        Assert.AreEqual(
+            "https://api.bol.com/retailer-demo/",
+            endpoints.BaseUriApiCalls
+        );
     }
 }

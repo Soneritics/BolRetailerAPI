@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace BolRetailerApi.Models.Response.Shipments
+namespace BolRetailerApi.Models.Response.Shipments;
+
+public class ShipmentOrder
 {
-    public class ShipmentOrder
-    {
-        public string OrderId { get; set; }
-        public DateTime OrderPlacedDateTime { get; set; }
-    }
+    public string OrderId { get; set; }
+    public DateTime OrderPlacedDateTime { get; set; }
 }

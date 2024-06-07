@@ -20,13 +20,9 @@ var api = new BolRetailerApi.BolRetailerApi(
 
 try
 {
-    Console.WriteLine("Fetching all orders..");
-    var orders = await api.OrdersService.GetOrdersAsync();
+    Console.WriteLine("Fetching all FBB orders..");
+    var orders = await api.OrdersService.GetOrdersAsync(method: Method.FBB);
     Console.WriteLine($"Found {orders.Count()} orders.\n");
-
-    Console.WriteLine("Fetching open orders..");
-    orders = await api.OrdersService.GetOrdersAsync();
-    Console.WriteLine($"Found {orders.Count()} open orders.\n");
 
     var firstOrder = orders.First();
     Console.WriteLine($"First order has order id {firstOrder.OrderId}\n");

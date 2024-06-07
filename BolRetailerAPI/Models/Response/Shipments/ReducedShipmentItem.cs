@@ -1,8 +1,7 @@
-﻿namespace BolRetailerApi.Models.Response.Shipments
+﻿namespace BolRetailerApi.Models.Response.Shipments;
+
+public class ReducedShipmentItem
 {
-    public class ReducedShipmentItem
-    {
-        public string OrderItemId { get; set; }
-        public string Ean { get; set; }
-    }
+    public string OrderItemId { get; set; }
+    public string Ean { get; set; }
 }

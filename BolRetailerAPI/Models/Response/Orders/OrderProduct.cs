@@ -1,8 +1,7 @@
-﻿namespace BolRetailerApi.Models.Response.Orders
+﻿namespace BolRetailerApi.Models.Response.Orders;
+
+public class OrderProduct
 {
-    public class OrderProduct
-    {
-        public string Ean { get; set; }
-        public string Title { get; set; }
-    }
+    public string Ean { get; set; }
+    public string Title { get; set; }
 }

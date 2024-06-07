@@ -1,8 +1,7 @@
-﻿namespace BolRetailerApi.Models.Status
+﻿namespace BolRetailerApi.Models.Status;
+
+public class Violation
 {
-    public class Violation
-    {
-        public string Name { get; set; }
-        public string Reason { get; set; }
-    }
+    public string Name { get; set; }
+    public string Reason { get; set; }
 }

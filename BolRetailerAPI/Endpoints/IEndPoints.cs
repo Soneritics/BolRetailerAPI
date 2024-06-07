@@ -1,16 +1,15 @@
-﻿namespace BolRetailerApi.Endpoints
-{
-    /// <summary>
-    /// Endpoint definitions.
-    /// </summary>
-    public interface IEndPoints
-    {
-        string BaseUriLogin { get; }
-        string BaseUriApiCalls { get; }
+﻿namespace BolRetailerApi.Endpoints;
 
-        string Token { get; }
-        string Orders { get; }
-        string SingleOrder { get; }
-        string Shipments { get; }
-    }
+/// <summary>
+///     Endpoint definitions.
+/// </summary>
+public interface IEndPoints
+{
+    string BaseUriLogin { get; }
+    string BaseUriApiCalls { get; }
+
+    string Token { get; }
+    string Orders { get; }
+    string SingleOrder { get; }
+    string Shipments { get; }
 }

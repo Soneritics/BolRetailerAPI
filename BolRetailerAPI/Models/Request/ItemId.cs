@@ -1,16 +1,15 @@
-﻿namespace BolRetailerApi.Models.Request
+﻿namespace BolRetailerApi.Models.Request;
+
+internal class ItemId
 {
-    internal class ItemId
+    public ItemId(string orderItemId)
     {
-        public string OrderItemId { get; set; }
-
-        public ItemId(string orderItemId)
-        {
-            OrderItemId = orderItemId;
-        }
-
-        public ItemId()
-        {
-        }
+        OrderItemId = orderItemId;
     }
+
+    public ItemId()
+    {
+    }
+
+    public string OrderItemId { get; set; }
 }
