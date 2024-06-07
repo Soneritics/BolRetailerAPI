@@ -39,6 +39,7 @@ public abstract class ClientBase
     }
 
     public Error LastError { get; protected set; }
+    
     public HttpStatusCode LastRequestStatus { get; protected set; }
 
     /// <summary>
@@ -79,7 +80,7 @@ public abstract class ClientBase
                 if (post != null)
                 {
                     result.Content = new StringContent(JsonConvert.SerializeObject(post, _serializerSettings));
-                    result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.retailer.v7+json");
+                    result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.retailer.v10+json");
                 }
 
                 return result;

@@ -69,11 +69,12 @@ public class BolRetailerApi : IBolRetailerApi
     }
 
     public RateLimits RateLimits { get; }
+    
     public ITokenService TokenService => _tokenService ??= new TokenService(_httpClient, EndPoints);
 
-    public OrdersService OrdersService =>
-        _ordersService ??= new OrdersService(_httpClient, EndPoints, _authorizationToken, RateLimits);
+    public OrdersService OrdersService => _ordersService
+        ??= new OrdersService(_httpClient, EndPoints, _authorizationToken, RateLimits);
 
-    public ShipmentService ShipmentService =>
-        _shipmentService ??= new ShipmentService(_httpClient, EndPoints, _authorizationToken, RateLimits);
+    public ShipmentService ShipmentService => _shipmentService
+        ??= new ShipmentService(_httpClient, EndPoints, _authorizationToken, RateLimits);
 }

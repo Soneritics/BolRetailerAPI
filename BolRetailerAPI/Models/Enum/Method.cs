@@ -3,5 +3,6 @@
 public enum Method
 {
     FBR = 0,
-    FBB = 1
+    FBB = 1,
+    ALL = 2
 }

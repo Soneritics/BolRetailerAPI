@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BolRetailerApi.Models.Response.Orders;
 
@@ -14,5 +15,6 @@ public class OrderItem
     public int QuantityCancelled { get; set; }
     public decimal UnitPrice { get; set; }
     public decimal Commission { get; set; }
+    public DateTime LatestChangedDateTime { get; set; }
     public IEnumerable<AdditionalService> AdditionalServices { get; set; }
 }

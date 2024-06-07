@@ -5,7 +5,7 @@ namespace BolRetailerApi.Models.Response.Orders;
 
 public class OrderFulfilment
 {
-    public string Method { get; set; }
+    public Method Method { get; set; }
     public DistributionParty? DistributionParty { get; set; }
     public DateTime? LatestDeliveryDate { get; set; }
     public DateTime? ExactDeliveryDate { get; set; }

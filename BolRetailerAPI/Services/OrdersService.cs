@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -40,22 +41,41 @@ public class OrdersService : AuthenticatedClientBase
     ///     Gets the orders from the API.
     /// </summary>
     /// <param name="page">The page.</param>
-    /// <param name="onlyOpenOrders">if set to <c>true</c> [only open orders].</param>
+    /// <param name="status">Fulfilment status</param>
     /// <param name="method">The method to handle the shipping (BOL/Retailer).</param>
+    /// <param name="changedAfter">Only get changed after this date time</param>
     /// <returns>List of (reduced) orders.</returns>
     public async Task<IEnumerable<ReducedOrder>> GetOrdersAsync(
         int page = 1,
-        bool onlyOpenOrders = false,
-        Method method = Method.FBR)
+        FulfilmentStatus status = FulfilmentStatus.OPEN,
+        Method method = Method.ALL,
+        DateTime changedAfter = default)
     {
-        var status = onlyOpenOrders ? "OPEN" : "ALL";
-        var fulfilmentMethod = method == Method.FBR ? "FBR" : "FBB";
+        var fulfilmentStatus = status switch
+        {
+            FulfilmentStatus.ALL => "ALL",
+            FulfilmentStatus.OPEN => "OPEN",
+            FulfilmentStatus.SHIPPED => "SHIPPED",
+            _ => throw new ArgumentOutOfRangeException(nameof(status), status, "Status not allowed")
+        };
 
-        var url =
-            $"{EndPoints.BaseUriApiCalls}{EndPoints.Orders}?"
+        var fulfilmentMethod = method switch
+        {
+            Method.FBR => "FBR",
+            Method.FBB => "FBB",
+            Method.ALL => "ALL",
+            _ => throw new ArgumentOutOfRangeException(nameof(method), method, "Method not allowed")
+        };
+
+        var url = $"{EndPoints.BaseUriApiCalls}{EndPoints.Orders}?"
             + $"fulfilment-method={fulfilmentMethod}"
-            + $"&status={status}"
+            + $"&status={fulfilmentStatus}"
             + $"&page={page}";
+
+        if (changedAfter != default)
+        {
+            url += $"&latest-change-date={changedAfter:O}";
+        }
 
         var result = await GetApiResult<OrdersResponse>(HttpMethod.Get, url);
 
@@ -153,7 +173,7 @@ public class OrdersService : AuthenticatedClientBase
         var orderItemIds = await GetOrderItemIdsAsync(orderId);
 
         if (orderItemIds?.Any() != true)
-            throw new NoOrderItemsInOrderException($"No order items found in order {orderId}.");
+            throw new NoOrderItemsInOrderException($"No order items found in order {orderId}");
 
         return await CancelOrderItemsAsync(orderItemIds, cancellationReason);
     }
@@ -186,7 +206,7 @@ public class OrdersService : AuthenticatedClientBase
             result.Add(
                 await GetApiResult<StatusResponse>(
                     HttpMethod.Put,
-                    $"{EndPoints.BaseUriApiCalls}{EndPoints.Orders}/shipment",
+                    $"{EndPoints.BaseUriApiCalls}{EndPoints.Shipments}",
                     shipmentRequest
                 )
             );
@@ -226,7 +246,7 @@ public class OrdersService : AuthenticatedClientBase
             result.Add(
                 await GetApiResult<StatusResponse>(
                     HttpMethod.Put,
-                    $"{EndPoints.BaseUriApiCalls}{EndPoints.Orders}/shipment",
+                    $"{EndPoints.BaseUriApiCalls}{EndPoints.Shipments}",
                     shipmentRequest
                 )
             );
