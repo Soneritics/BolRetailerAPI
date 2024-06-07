@@ -1,7 +1,6 @@
-﻿namespace BolRetailerApi.Models.Response.Orders
+﻿namespace BolRetailerApi.Models.Response.Orders;
+
+public class AdditionalService
 {
-    public class AdditionalService
-    {
-        public string ServiceType { get; set; }
-    }
+    public string ServiceType { get; set; }
 }

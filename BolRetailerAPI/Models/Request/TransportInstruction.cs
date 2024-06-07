@@ -1,8 +1,7 @@
-﻿namespace BolRetailerApi.Models.Request
+﻿namespace BolRetailerApi.Models.Request;
+
+internal class TransportInstruction
 {
-    internal class TransportInstruction
-    {
-        public string TransporterCode { get; set; }
-        public string TrackAndTrace { get; set; }
-    }
+    public string TransporterCode { get; set; }
+    public string TrackAndTrace { get; set; }
 }

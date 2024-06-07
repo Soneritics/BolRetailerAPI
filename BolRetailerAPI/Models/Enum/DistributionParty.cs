@@ -1,8 +1,7 @@
-﻿namespace BolRetailerApi.Models.Enum
+﻿namespace BolRetailerApi.Models.Enum;
+
+public enum DistributionParty
 {
-    public enum DistributionParty
-    {
-        RETAILER = 0,
-        BOL = 1
-    }
+    RETAILER = 0,
+    BOL = 1
 }

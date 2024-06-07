@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BolRetailerApi.Models.Response.Orders
+namespace BolRetailerApi.Models.Response.Orders;
+
+public class Order
 {
-    public class Order
-    {
-        public string OrderId { get; set; }
-        public bool PickupPoint { get; set; }
-        public DateTime OrderPlacedDateTime { get; set; }
-        public ShipmentDetails ShipmentDetails { get; set; }
-        public BillingDetails BillingDetails { get; set; }
-        public List<OrderItem> OrderItems { get; set; }
-    }
+    public string OrderId { get; set; }
+    public bool PickupPoint { get; set; }
+    public DateTime OrderPlacedDateTime { get; set; }
+    public ShipmentDetails ShipmentDetails { get; set; }
+    public BillingDetails BillingDetails { get; set; }
+    public List<OrderItem> OrderItems { get; set; }
 }

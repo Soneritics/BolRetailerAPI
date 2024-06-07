@@ -1,11 +1,10 @@
-﻿namespace BolRetailerApi.Models.Enum
+﻿namespace BolRetailerApi.Models.Enum;
+
+public enum TimeFrameType
 {
-    public enum TimeFrameType
-    {
-        REGULAR = 0,
-        EVENING = 1,
-        APPOINTMENT = 2,
-        SAMEDAY = 3,
-        SUNDAY = 4
-    }
+    REGULAR = 0,
+    EVENING = 1,
+    APPOINTMENT = 2,
+    SAMEDAY = 3,
+    SUNDAY = 4
 }

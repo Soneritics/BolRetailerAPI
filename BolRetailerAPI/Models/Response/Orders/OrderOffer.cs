@@ -1,8 +1,7 @@
-﻿namespace BolRetailerApi.Models.Response.Orders
+﻿namespace BolRetailerApi.Models.Response.Orders;
+
+public class OrderOffer
 {
-    public class OrderOffer
-    {
-        public string OfferId { get; set; }
-        public string Reference { get; set; }
-    }
+    public string OfferId { get; set; }
+    public string Reference { get; set; }
 }
