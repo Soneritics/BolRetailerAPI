@@ -41,7 +41,7 @@ try
         TransporterCode.Tnt,
         "3SABCD000000001"
     );
-    Console.WriteLine($"Order shipped with status {shippedOrder.First().Status}\n");
+    Console.WriteLine($"Order shipped with status {shippedOrder.Status}\n");
 
     Console.WriteLine($"Fetching shipped order details for order {firstOrder.OrderId}..");
     var shippedOrderDetails = await api

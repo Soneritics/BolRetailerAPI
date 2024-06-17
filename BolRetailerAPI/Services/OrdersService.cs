@@ -99,14 +99,14 @@ public class OrdersService : AuthenticatedClientBase
     ///     Gets the order item ids from the items of an order.
     /// </summary>
     /// <param name="orderId">The order identifier.</param>
-    /// <returns>List of ids.</returns>
-    public async Task<IEnumerable<string>> GetOrderItemIdsAsync(string orderId)
+    /// <returns>List of order items.</returns>
+    public async Task<IEnumerable<OrderItemsWithQuantity>> GetOrderItemsAsync(string orderId)
     {
         var order = await GetOrderAsync(orderId);
 
         return order?.OrderItems?.Any() != true
             ? default
-            : order.OrderItems.Select(oi => oi.OrderItemId);
+            : order.OrderItems.Select(oi => new OrderItemsWithQuantity(oi.OrderItemId, oi.Quantity));
     }
 
     /// <summary>
@@ -170,12 +170,12 @@ public class OrdersService : AuthenticatedClientBase
         string orderId,
         CancellationReason cancellationReason = null)
     {
-        var orderItemIds = await GetOrderItemIdsAsync(orderId);
+        var orderItemIds = (await GetOrderItemsAsync(orderId)).ToList();
 
-        if (orderItemIds?.Any() != true)
+        if (orderItemIds.Count == 0)
             throw new NoOrderItemsInOrderException($"No order items found in order {orderId}");
 
-        return await CancelOrderItemsAsync(orderItemIds, cancellationReason);
+        return await CancelOrderItemsAsync(orderItemIds.Select(oi => oi.OrderItemId), cancellationReason);
     }
 
     /// <summary>
@@ -186,73 +186,53 @@ public class OrdersService : AuthenticatedClientBase
     /// <param name="shipmentReference">The shipment reference.</param>
     /// <param name="labelId">The label identifier.</param>
     /// <returns>StatusResponse.</returns>
-    public async Task<IEnumerable<StatusResponse>> ShipOrderItemsAsync(
-        IEnumerable<string> orderItemIds,
+    public async Task<StatusResponse> ShipOrderItemsAsync(
+        IEnumerable<OrderItemsWithQuantity> orderItems,
         string shipmentReference,
         string labelId)
     {
-        var result = new List<StatusResponse>();
-        var orderItems = orderItemIds.Select(oi => new ItemId(oi));
-
-        foreach (var orderItem in orderItems)
+        var shipmentRequest = new ShipmentRequest
         {
-            var shipmentRequest = new ShipmentRequest
-            {
-                OrderItems = new[] { orderItem },
-                ShipmentReference = shipmentReference,
-                ShippingLabelId = labelId
-            };
+            OrderItems = orderItems,
+            ShipmentReference = shipmentReference,
+            ShippingLabelId = labelId
+        };
 
-            result.Add(
-                await GetApiResult<StatusResponse>(
-                    HttpMethod.Put,
-                    $"{EndPoints.BaseUriApiCalls}{EndPoints.Shipments}",
-                    shipmentRequest
-                )
-            );
-        }
-
-        return result;
+        return await GetApiResult<StatusResponse>(
+            HttpMethod.Post,
+            $"{EndPoints.BaseUriApiCalls}{EndPoints.Shipments}",
+            shipmentRequest
+        );
     }
 
     /// <summary>
     ///     Sets shipment state for order items.
     ///     Use this method when you use your own transporter.
     /// </summary>
-    /// <param name="orderItemIds">The order item ids.</param>
+    /// <param name="orderItems">The order items.</param>
     /// <param name="transporterCode">The transporter code.</param>
     /// <param name="trackingCode">The tracking code.</param>
     /// <returns>StatusResponse.</returns>
-    public async Task<IEnumerable<StatusResponse>> ShipOrderItemsAsync(
-        IEnumerable<string> orderItemIds,
+    public async Task<StatusResponse> ShipOrderItemsAsync(
+        IEnumerable<OrderItemsWithQuantity> orderItems,
         TransporterCode transporterCode,
         string trackingCode)
     {
-        var result = new List<StatusResponse>();
-        var orderItems = orderItemIds.Select(oi => new ItemId(oi));
-
-        foreach (var orderItem in orderItems)
+        var shipmentRequest = new ShipmentRequest
         {
-            var shipmentRequest = new ShipmentRequest
+            OrderItems = orderItems,
+            Transport = new TransportInstruction
             {
-                OrderItems = new[] { orderItem },
-                Transport = new TransportInstruction
-                {
-                    TransporterCode = transporterCode.TransporterCodeValue,
-                    TrackAndTrace = trackingCode
-                }
-            };
+                TransporterCode = transporterCode.TransporterCodeValue,
+                TrackAndTrace = trackingCode
+            }
+        };
 
-            result.Add(
-                await GetApiResult<StatusResponse>(
-                    HttpMethod.Put,
-                    $"{EndPoints.BaseUriApiCalls}{EndPoints.Shipments}",
-                    shipmentRequest
-                )
-            );
-        }
-
-        return result;
+        return await GetApiResult<StatusResponse>(
+            HttpMethod.Post,
+            $"{EndPoints.BaseUriApiCalls}{EndPoints.Shipments}",
+            shipmentRequest
+        );
     }
 
     /// <summary>
@@ -266,18 +246,18 @@ public class OrdersService : AuthenticatedClientBase
     /// <param name="labelId">The label identifier.</param>
     /// <returns>StatusResponse.</returns>
     /// <exception cref="NoOrderItemsInOrderException">No order items found in order {orderId}.</exception>
-    public async Task<IEnumerable<StatusResponse>> ShipOrderAsync(
+    public async Task<StatusResponse> ShipOrderAsync(
         string orderId,
         string shipmentReference,
         string labelId)
     {
-        var orderItemIds = await GetOrderItemIdsAsync(orderId);
+        var orderItems = (await GetOrderItemsAsync(orderId)).ToList();
 
-        if (orderItemIds?.Any() != true)
+        if (orderItems.Count == 0)
             throw new NoOrderItemsInOrderException($"No order items found in order {orderId}.");
-
+        
         return await ShipOrderItemsAsync(
-            orderItemIds,
+            orderItems,
             shipmentReference,
             labelId
         );
@@ -294,18 +274,18 @@ public class OrdersService : AuthenticatedClientBase
     /// <param name="trackingCode">The tracking code.</param>
     /// <returns>StatusResponse.</returns>
     /// <exception cref="NoOrderItemsInOrderException">No order items found in order {orderId}.</exception>
-    public async Task<IEnumerable<StatusResponse>> ShipOrderAsync(
+    public async Task<StatusResponse> ShipOrderAsync(
         string orderId,
         TransporterCode transporterCode,
         string trackingCode)
     {
-        var orderItemIds = await GetOrderItemIdsAsync(orderId);
+        var orderItems = (await GetOrderItemsAsync(orderId)).ToList();
 
-        if (orderItemIds?.Any() != true)
+        if (orderItems.Count == 0)
             throw new NoOrderItemsInOrderException($"No order items found in order {orderId}.");
 
         return await ShipOrderItemsAsync(
-            orderItemIds,
+            orderItems,
             transporterCode,
             trackingCode
         );
