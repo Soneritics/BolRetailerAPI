@@ -12,6 +12,6 @@ public class ReducedOrderItem
     public int QuantityCancelled { get; set; }
     public bool CancellationRequest { get; set; }
     public Method FulfilmentMethod { get; set; }
-    public FulfilmentStatus FulfilmentStatus { get; set; }
+    public string FulfilmentStatus { get; set; }
     public DateTime LatestChangedDateTime { get; set; }
 }

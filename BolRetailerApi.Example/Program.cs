@@ -21,7 +21,7 @@ var api = new BolRetailerApi.BolRetailerApi(
 try
 {
     Console.WriteLine("Fetching all FBB orders..");
-    var orders = await api.OrdersService.GetOrdersAsync(method: Method.FBB);
+    var orders = await api.OrdersService.GetOrdersAsync(1, method: Method.FBB, status: FulfilmentStatus.ALL);
     Console.WriteLine($"Found {orders.Count()} orders.\n");
 
     var firstOrder = orders.First();

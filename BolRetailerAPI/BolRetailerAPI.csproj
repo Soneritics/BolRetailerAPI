@@ -3,7 +3,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageId>BolRetailerAPI</PackageId>
-        <Version>10.1.0</Version>
+        <Version>10.2.0</Version>
         <Authors>Soneritics</Authors>
         <Description>Retailer API v10 for Bol.com</Description>
         <IsPackable>true</IsPackable>
