@@ -5,6 +5,7 @@ public class OrderItemsWithQuantity
     public OrderItemsWithQuantity(string orderItemId, int quantity)
     {
         OrderItemId = orderItemId;
+        Quantity = quantity;
     }
 
     public OrderItemsWithQuantity()
